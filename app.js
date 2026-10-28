@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const KEY_SESSION = "write-echo.session.v1";
+  const KEY_SESSION = "write-echo.session.v2";
   const KEY_QUEUE = "write-echo.queue.v1";
   const KIND_LABEL = {
     consonant: "พยัญชนะ · consonant",
@@ -39,6 +39,7 @@
   const ctx = canvas.getContext("2d");
 
   let prompts = [];
+  let repeats = 3;
   let session = null;
   let queue = [];
   let strokes = [];
@@ -210,13 +211,14 @@
   }
 
   function totalSteps() {
-    return prompts.length * 2;
+    return prompts.length * repeats;
   }
 
   function taskAt(index) {
     return {
-      prompt: prompts[Math.floor(index / 2)],
-      style: index % 2 === 0 ? "everyday" : "fast",
+      prompt: prompts[Math.floor(index / repeats)],
+      rep: index % repeats,
+      style: "everyday",
     };
   }
 
@@ -266,15 +268,9 @@
     kindEl.textContent = KIND_LABEL[task.prompt.kind] || task.prompt.kind;
     promptEl.textContent = task.prompt.text;
     promptEl.className = `prompt-text ${sizeClass(task.prompt.text)}`;
-    if (task.style === "everyday") {
-      styleEl.textContent = "your everyday style";
-      styleEl.classList.remove("fast");
-      styleHelp.textContent = "เขียนแบบที่คุณเขียนปกติ";
-    } else {
-      styleEl.textContent = "fast";
-      styleEl.classList.add("fast");
-      styleHelp.textContent = "เขียนคำเดิมอีกครั้ง ให้เร็ว";
-    }
+    styleEl.textContent = `${task.rep + 1} of ${repeats}`;
+    styleEl.classList.remove("fast");
+    styleHelp.textContent = "เขียนแบบที่คุณเขียนปกติ";
     redraw();
   }
 
@@ -505,17 +501,43 @@
     setInterval(flush, 15000);
   }
 
+  function expandPrompts(data) {
+    if (!data || typeof data !== "object" || Array.isArray(data) || data.repeats !== 3) {
+      throw new Error("bad prompt file");
+    }
+    const groups = [
+      ["consonants", "consonant"],
+      ["vowels", "vowel"],
+      ["tones", "tone"],
+      ["words", "word"],
+    ];
+    const items = [];
+    groups.forEach(([key, kind]) => {
+      const list = data[key];
+      if (!Array.isArray(list)) throw new Error(key);
+      list.forEach((text, index) => {
+        if (typeof text !== "string" || !text.trim()) throw new Error(key);
+        const value = text.trim();
+        const id = kind === "word"
+          ? `word-${String(index + 1).padStart(2, "0")}`
+          : `${kind}-${Array.from(value).map((ch) => ch.codePointAt(0).toString(16).padStart(4, "0")).join("-")}`;
+        items.push({ id, text: value, kind });
+      });
+    });
+    return items;
+  }
+
   async function init() {
     try {
       const response = await fetch("prompts.json", { cache: "no-cache" });
       if (!response.ok) throw new Error("status " + response.status);
-      prompts = await response.json();
+      prompts = expandPrompts(await response.json());
     } catch (err) {
       banner.hidden = false;
       banner.textContent = "Could not load the prompt list.";
       return;
     }
-    if (!Array.isArray(prompts) || !prompts.length) {
+    if (!prompts.length) {
       banner.hidden = false;
       banner.textContent = "The prompt list is empty.";
       return;

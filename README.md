@@ -1,6 +1,6 @@
 # Write Echo
 
-Write Echo collects anonymous Thai handwriting strokes so a computer can learn to read them. The site is static. Each prompt is written twice: first in your everyday style, then fast.
+Write Echo collects anonymous Thai handwriting strokes so a computer can learn to read them. The site is static. Each prompt is written three times, in the writer's everyday style. Prompts are shown in one looped serif Thai font.
 
 The repository name stays `thai-writing-capture`. The live site is GitHub Pages:
 
@@ -46,7 +46,7 @@ Email sign-in is on by default. If the message never arrives, check **Authentica
 
 `config.js` already has this project's URL (`https://iicbhwkehchwmqrlrflb.supabase.co`) and its anon public key. That key is the new-style publishable key. `supabase-js` v2 takes it as the second argument to `createClient`.
 
-The publishable key is safe to be public **only because of row level security**. Anon can insert writers and samples. It cannot select, update, or delete. The capture page sends `writers.id` and `samples.id` from `crypto.randomUUID()`, sets `consented` to true, and calls `.insert()` with no `.select()` after it, because anon cannot read the row back. `handedness` is `right`, `left`, or `both`. `style` is `everyday` or `fast`. Export signs in with an email magic link and then reads `writers` and `samples`.
+The publishable key is safe to be public **only because of row level security**. Anon can insert writers and samples. It cannot select, update, or delete. The capture page sends `writers.id` and `samples.id` from `crypto.randomUUID()`, sets `consented` to true, and calls `.insert()` with no `.select()` after it, because anon cannot read the row back. `handedness` is `right`, `left`, or `both`. This test set sends `style` `everyday` for every sample. The database still accepts `fast`, but the page does not ask for a fast copy. Export signs in with an email magic link and then reads `writers` and `samples`.
 
 Do not put any other Supabase key in `config.js`, this repository, or the browser. If you rotate the publishable key, replace `SUPABASE_ANON_KEY` and push to `main`.
 
@@ -68,7 +68,7 @@ You export from https://wredlich.github.io/thai-writing-capture/admin.html — e
 
 The start screen asks for a nickname, handedness (right, left, or both), an age range, and this consent line: “I agree my anonymous handwriting strokes may be used to train a handwriting recognition model.”
 
-`prompts.json` has 300 prompts. Each is shown twice, so the progress counter runs to 600 (for example `37 / 600`). Order is consonants, vowel signs (with อ where a carrier is needed), tone marks, ์ ๆ ฯ, Thai and Arabic digits, then common words. Words cover vowels above, below, leading, trailing, and surrounding the consonant, including stacked vowel and tone marks such as กิน เพื่อน เที่ยว ไม่ น้ำ ใคร ก๋วยเตี๋ยว.
+`prompts.json` is the whole prompt list. It has the common consonants, the main vowel forms on อ, the four tone marks on อ, and ten short words. Each prompt is asked three times, so the progress counter runs to 183 (for example `4 / 183`). There are no Thai numerals and no second font or fast copy.
 
 Clear wipes the current canvas. Next saves it. Skip saves the item as skipped. The writer id and the prompt index are kept in localStorage, and samples that have not uploaded yet stay queued there and retry when the device is online.
 
@@ -76,11 +76,9 @@ A sample’s `strokes` field is `[[{x, y, t, pressure, pointerType}, ...], ...]`
 
 ## Replacing the prompt list
 
-`prompts.json` is an array of `{ "id", "text", "kind" }`. `kind` is `consonant`, `vowel`, `tone`, `mark`, `digit`, or `word`. The page uses whatever length it finds. Do not reorder the file after someone has started; resume progress is an index into the array.
+Edit `prompts.json` directly. It has `repeats`, then arrays named `consonants`, `vowels`, `tones`, and `words`. The ten words are the `words` array. Do not reorder the file after someone has started; resume progress is an index into that order, with each entry repeated three times.
 
-`scripts/check_prompts.py` guards the shipped list (44 consonants in order, both digit sets, and the vowel-position words). Update that script if you intentionally replace the list, or the Pages workflow will fail.
-
-`scripts/build_prompts.py` regenerates the current 300-item file.
+`scripts/check_prompts.py` guards the shipped list. Update that script if you intentionally replace it, or the Pages workflow will fail.
 
 ## Local preview
 
