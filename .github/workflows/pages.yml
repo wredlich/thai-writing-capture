@@ -30,7 +30,7 @@ jobs:
       - name: Collect site
         run: |
           mkdir -p _site/fonts
-          cp index.html admin.html app.js admin.js config.js prompts.json styles.css favicon.svg .nojekyll _site/
+          cp index.html admin.html mockup.html app.js admin.js config.js prompts.json styles.css favicon.svg .nojekyll _site/
           cp fonts/*.woff2 fonts/OFL.txt _site/fonts/
 
       - name: Configure Pages

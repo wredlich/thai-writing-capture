@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f3ecdf">
+  <meta name="color-scheme" content="light">
+  <title>Write Echo — writing box mockup</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <style>
+    @font-face {
+      font-family: "Noto Sans Thai";
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url("fonts/noto-sans-thai-latin-400.woff2") format("woff2");
+      unicode-range: U+0000-00FF, U+2000-206F, U+2010-2027, U+20AC, U+2122;
+    }
+    @font-face {
+      font-family: "Noto Sans Thai";
+      font-style: normal;
+      font-weight: 600;
+      font-display: swap;
+      src: url("fonts/noto-sans-thai-latin-600.woff2") format("woff2");
+      unicode-range: U+0000-00FF, U+2000-206F, U+2010-2027, U+20AC, U+2122;
+    }
+    @font-face {
+      font-family: "Noto Sans Thai";
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url("fonts/noto-sans-thai-thai-400.woff2") format("woff2");
+      unicode-range: U+0E00-0E7F;
+    }
+
+    :root {
+      --paper: #f3ecdf;
+      --ink: #1d1a16;
+      --pad: #1a1a2e;
+      --glyph: clamp(52px, 14vw, 104px);
+      --head: calc(var(--glyph) * 0.78);
+      --box-h: calc(var(--glyph) + var(--head) * 2);
+      --example: clamp(52px, 13vw, 84px);
+      color-scheme: light;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Noto Sans Thai", "Leelawadee UI", "Thonburi", Tahoma, sans-serif;
+    }
+
+    .page {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding:
+        max(12px, env(safe-area-inset-top))
+        16px
+        max(16px, env(safe-area-inset-bottom));
+    }
+
+    .stage {
+      width: min(100%, 640px);
+      text-align: center;
+    }
+
+    .stage-label, .eyebrow {
+      margin: 0;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: #6f665c;
+    }
+
+    .stage-head {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .display {
+      min-height: calc(var(--example) * 1.25);
+      font-size: var(--example);
+      line-height: 1.25;
+      font-weight: 400;
+      color: var(--ink);
+    }
+
+    .glyph {
+      display: inline-block;
+      opacity: 0;
+      clip-path: inset(0 100% 0 0);
+      animation: stroke-in 0.42s ease forwards;
+    }
+
+    .glyph.steps {
+      animation: glyph-steps 1.7s ease forwards;
+    }
+
+    @keyframes stroke-in {
+      0% { opacity: 0; clip-path: inset(0 100% 0 0); }
+      45% { opacity: 1; }
+      100% { opacity: 1; clip-path: inset(0 0 0 0); }
+    }
+
+    @keyframes glyph-steps {
+      0% { opacity: 0; clip-path: inset(0 100% 0 0); }
+      12% { opacity: 1; clip-path: inset(0 66% 0 0); }
+      34% { opacity: 1; clip-path: inset(0 66% 0 0); }
+      48% { opacity: 1; clip-path: inset(0 33% 0 0); }
+      70% { opacity: 1; clip-path: inset(0 33% 0 0); }
+      84%, 100% { opacity: 1; clip-path: inset(0 0 0 0); }
+    }
+
+    .text-btn, .toggle button, .clear {
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+      background: transparent;
+    }
+
+    .text-btn {
+      border: 0;
+      min-height: 36px;
+      padding: 4px 8px;
+      color: #6f665c;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 8px;
+      width: min(100%, 640px);
+    }
+
+    .toggle {
+      display: inline-flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 4px;
+      gap: 4px;
+      border-radius: 999px;
+      background: rgba(29, 26, 22, 0.06);
+    }
+
+    .toggle button {
+      border: 0;
+      border-radius: 999px;
+      min-height: 40px;
+      padding: 6px 12px;
+    }
+
+    .toggle button[aria-pressed="true"] {
+      background: #fffdf8;
+      box-shadow: 0 1px 2px rgba(33, 25, 16, 0.12);
+      font-weight: 600;
+    }
+
+    :focus-visible {
+      outline: 2px solid #9f1d22;
+      outline-offset: 2px;
+    }
+
+    .slot {
+      margin-top: clamp(12px, 3vh, 28px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: min(100%, calc(100vw - 32px));
+    }
+
+    .sheet {
+      position: relative;
+      display: grid;
+      place-items: center;
+      height: var(--box-h);
+      background: var(--pad);
+      border-radius: 22px;
+      overflow: hidden;
+      touch-action: none;
+      box-shadow: 0 12px 40px rgba(26, 26, 46, 0.16);
+    }
+
+    .sheet[data-variant="char"] {
+      width: var(--box-h);
+      max-width: 100%;
+    }
+
+    .sheet[data-variant="word"] {
+      box-sizing: content-box;
+      width: max-content;
+      max-width: 100%;
+      padding-inline: calc(var(--glyph) * 0.42);
+    }
+
+    .guide {
+      grid-area: 1 / 1;
+      margin: 0;
+      font-weight: 400;
+      font-size: var(--glyph);
+      line-height: 1;
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
+      z-index: 0;
+    }
+
+    .sheet[data-guide="full"] .guide {
+      color: #c9c9d6;
+      -webkit-text-fill-color: #c9c9d6;
+    }
+
+    .sheet[data-guide="faint"] .guide {
+      color: transparent;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='5' height='5'><circle cx='1.15' cy='1.15' r='0.95' fill='white' fill-opacity='0.82'/></svg>");
+      background-size: 5px 5px;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .sheet[data-guide="empty"] .guide {
+      visibility: hidden;
+    }
+
+    #pad {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 1;
+      touch-action: none;
+      cursor: crosshair;
+      background: transparent;
+    }
+
+    .clear {
+      border: 1px solid rgba(29, 26, 22, 0.18);
+      border-radius: 999px;
+      min-height: 40px;
+      padding: 6px 16px;
+    }
+
+    @media (max-width: 380px) {
+      :root { --glyph: clamp(46px, 13.2vw, 104px); }
+      .toggle button { padding: 6px 10px; font-size: 0.92rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .glyph, .glyph.steps {
+        animation: none;
+        opacity: 1;
+        clip-path: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="stage" aria-label="Example">
+      <div class="stage-head">
+        <p class="stage-label">Example</p>
+        <button type="button" class="text-btn" id="replay">Replay</button>
+      </div>
+      <div class="display" id="display" lang="th"></div>
+    </section>
+    <div class="controls">
+      <div class="toggle" role="group" aria-label="Box shape">
+        <button type="button" data-variant="char" aria-pressed="true">Character</button>
+        <button type="button" data-variant="word" aria-pressed="false">Word</button>
+      </div>
+      <div class="toggle" role="group" aria-label="Guide">
+        <button type="button" data-guide="full" aria-pressed="true">Full guide</button>
+        <button type="button" data-guide="faint" aria-pressed="false">Faint guide</button>
+        <button type="button" data-guide="empty" aria-pressed="false">Empty</button>
+      </div>
+    </div>
+    <div class="slot">
+      <div class="sheet" id="sheet" data-variant="char" data-guide="full">
+        <span class="guide" id="guide" lang="th" aria-hidden="true">ก</span>
+        <canvas id="pad" aria-label="Writing box, guide ก, full guide"></canvas>
+      </div>
+      <button type="button" class="clear" id="clear">Clear</button>
+    </div>
+  </main>
+  <script>
+    (function () {
+      var sheet = document.getElementById("sheet");
+      var guide = document.getElementById("guide");
+      var display = document.getElementById("display");
+      var canvas = document.getElementById("pad");
+      var ctx = canvas.getContext("2d");
+      var shapeButtons = document.querySelectorAll("[data-variant]");
+      var guideButtons = document.querySelectorAll("[data-guide]");
+      var prompts = { char: "ก", word: "สวัสดี" };
+      var guideNames = { full: "full guide", faint: "faint guide", empty: "empty" };
+      var strokes = [];
+      var activeId = null;
+
+      function clusters(text) {
+        if (typeof Intl !== "undefined" && typeof Intl.Segmenter === "function") {
+          return Array.from(new Intl.Segmenter("th", { granularity: "grapheme" }).segment(text), function (part) {
+            return part.segment;
+          });
+        }
+        return Array.from(text);
+      }
+
+      function showExample(text) {
+        var parts = clusters(text);
+        display.replaceChildren();
+        parts.forEach(function (part, index) {
+          var span = document.createElement("span");
+          span.className = parts.length === 1 ? "glyph steps" : "glyph";
+          span.textContent = part;
+          if (parts.length > 1) span.style.animationDelay = (index * 0.38) + "s";
+          display.appendChild(span);
+        });
+      }
+
+      function describe() {
+        canvas.setAttribute(
+          "aria-label",
+          "Writing box, guide " + prompts[sheet.dataset.variant] + ", " + guideNames[sheet.dataset.guide]
+        );
+      }
+
+      function inkWidth(point) {
+        var pressure = point.pressure > 0 ? Math.min(point.pressure, 1) : 0.5;
+        return 4 + pressure;
+      }
+
+      function paint(points) {
+        if (!points.length) return;
+        if (points.length === 1) {
+          ctx.beginPath();
+          ctx.arc(points[0].x, points[0].y, inkWidth(points[0]) / 2, 0, Math.PI * 2);
+          ctx.fill();
+          return;
+        }
+        for (var i = 1; i < points.length; i += 1) {
+          ctx.beginPath();
+          ctx.moveTo(points[i - 1].x, points[i - 1].y);
+          ctx.lineTo(points[i].x, points[i].y);
+          ctx.lineWidth = inkWidth(points[i]);
+          ctx.stroke();
+        }
+      }
+
+      function redraw() {
+        var dpr = window.devicePixelRatio || 1;
+        var w = canvas.clientWidth || canvas.width / dpr;
+        var h = canvas.clientHeight || canvas.height / dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, w, h);
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.strokeStyle = "#FFFFFF";
+        ctx.fillStyle = "#FFFFFF";
+        strokes.forEach(paint);
+      }
+
+      function resize() {
+        var rect = canvas.getBoundingClientRect();
+        var dpr = window.devicePixelRatio || 1;
+        var bw = Math.max(1, Math.round(rect.width * dpr));
+        var bh = Math.max(1, Math.round(rect.height * dpr));
+        if (canvas.width !== bw || canvas.height !== bh) {
+          canvas.width = bw;
+          canvas.height = bh;
+        }
+        redraw();
+      }
+
+      function setVariant(name) {
+        sheet.dataset.variant = name;
+        guide.textContent = prompts[name];
+        shapeButtons.forEach(function (btn) {
+          btn.setAttribute("aria-pressed", String(btn.dataset.variant === name));
+        });
+        strokes = [];
+        describe();
+        showExample(prompts[name]);
+        requestAnimationFrame(resize);
+      }
+
+      function setGuide(name) {
+        sheet.dataset.guide = name;
+        guideButtons.forEach(function (btn) {
+          btn.setAttribute("aria-pressed", String(btn.dataset.guide === name));
+        });
+        describe();
+      }
+
+      function addPoint(event) {
+        var stroke = strokes[strokes.length - 1];
+        if (!stroke) return;
+        var rect = canvas.getBoundingClientRect();
+        var point = {
+          x: event.clientX - rect.left,
+          y: event.clientY - rect.top,
+          pressure: Number.isFinite(event.pressure) ? event.pressure : 0
+        };
+        var prev = stroke[stroke.length - 1];
+        if (prev && Math.abs(prev.x - point.x) < 0.4 && Math.abs(prev.y - point.y) < 0.4) return;
+        stroke.push(point);
+      }
+
+      canvas.addEventListener("pointerdown", function (event) {
+        if (activeId !== null) return;
+        event.preventDefault();
+        try { canvas.setPointerCapture(event.pointerId); } catch (err) { /* ignore */ }
+        activeId = event.pointerId;
+        strokes.push([]);
+        addPoint(event);
+        redraw();
+      }, { passive: false });
+
+      canvas.addEventListener("pointermove", function (event) {
+        if (event.pointerId !== activeId) return;
+        event.preventDefault();
+        var list = typeof event.getCoalescedEvents === "function" ? event.getCoalescedEvents() : [event];
+        list.forEach(addPoint);
+        redraw();
+      }, { passive: false });
+
+      function endStroke(event) {
+        if (event.pointerId !== activeId) return;
+        addPoint(event);
+        activeId = null;
+        var last = strokes[strokes.length - 1];
+        if (last && last.length === 0) strokes.pop();
+        redraw();
+      }
+
+      canvas.addEventListener("pointerup", endStroke, { passive: false });
+      canvas.addEventListener("pointercancel", endStroke, { passive: false });
+      canvas.addEventListener("contextmenu", function (event) { event.preventDefault(); });
+
+      shapeButtons.forEach(function (btn) {
+        btn.addEventListener("click", function () { setVariant(btn.dataset.variant); });
+      });
+      guideButtons.forEach(function (btn) {
+        btn.addEventListener("click", function () { setGuide(btn.dataset.guide); });
+      });
+      document.getElementById("clear").addEventListener("click", function () {
+        strokes = [];
+        redraw();
+      });
+      document.getElementById("replay").addEventListener("click", function () {
+        showExample(prompts[sheet.dataset.variant]);
+      });
+
+      if (typeof ResizeObserver === "function") {
+        new ResizeObserver(resize).observe(sheet);
+      } else {
+        window.addEventListener("resize", resize);
+      }
+      showExample(prompts.char);
+      resize();
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(function () {
+          showExample(prompts[sheet.dataset.variant]);
+        });
+      }
+    }());
+  </script>
+</body>
+</html>
