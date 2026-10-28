@@ -17,14 +17,14 @@ create table if not exists public.invites (
 alter table public.invites enable row level security;
 
 -- Returns true when the code is in invites. Security definer so the anon role never reads that table.
-create or replace function public.capture_invite_ok(code text)
+create or replace function public.capture_invite_ok(p_code text)
 returns boolean
 language sql
 stable
 security definer
 set search_path = public
 as $$
-  select exists (select 1 from public.invites i where i.code = code);
+  select exists (select 1 from public.invites i where i.code = p_code);
 $$;
 
 -- The capture page calls this. A missing function means invite codes are not on yet.
