@@ -285,7 +285,7 @@
 
   function inkWidth(point) {
     const pressure = point.pressure > 0 ? Math.min(point.pressure, 1) : 0.5;
-    return 4 + pressure;
+    return 1.5 * (1.5 + pressure * 2.6);
   }
 
   function paint(points) {
