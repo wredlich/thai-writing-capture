@@ -57,6 +57,13 @@ html, body {
 
 [hidden] { display: none !important; }
 
+html.need-phone #screen-setup,
+html.need-phone #screen-write,
+html.need-phone #screen-thanks,
+html.need-phone #screen-break { display: none !important; }
+
+html.need-phone #screen-phone { display: block !important; }
+
 button, input { font: inherit; color: inherit; }
 
 :focus-visible {
@@ -282,6 +289,7 @@ body.writing {
 .topbar {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 12px;
   padding: 10px 14px 0;
 }
@@ -388,9 +396,25 @@ body.writing {
 
 .toolbar {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   align-items: center;
   padding: 8px 14px calc(12px + env(safe-area-inset-bottom));
+}
+
+.phone-gate { text-align: center; }
+
+#phone-qr {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0 8px;
+}
+
+#phone-qr svg {
+  width: min(220px, 64vw);
+  height: auto;
+  background: #fff;
+  border-radius: 12px;
 }
 
 .toolbar .ghost, .toolbar .primary { width: auto; }

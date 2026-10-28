@@ -3,6 +3,7 @@
 
   const KEY_SESSION = "write-echo.session.v2";
   const KEY_QUEUE = "write-echo.queue.v1";
+  const KEY_DONE = "write-echo.done.v1";
   const KIND_LABEL = {
     consonant: "พยัญชนะ · consonant",
     vowel: "สระ · vowel",
@@ -33,6 +34,9 @@
   const writeError = document.getElementById("write-error");
   const uploadStatus = document.getElementById("upload-status");
   const thanksStatus = document.getElementById("thanks-status");
+  const screenBreak = document.getElementById("screen-break");
+  const screenPhone = document.getElementById("screen-phone");
+  const breakCount = document.getElementById("break-count");
   const btnClear = document.getElementById("btn-clear");
   const btnSkip = document.getElementById("btn-skip");
   const btnNext = document.getElementById("btn-next");
@@ -40,6 +44,7 @@
 
   let prompts = [];
   let repeats = 3;
+  let done = new Set();
   let session = null;
   let queue = [];
   let strokes = [];
@@ -111,6 +116,32 @@
     return true;
   }
 
+  function loadDone() {
+    try {
+      const raw = localStorage.getItem(KEY_DONE);
+      const data = raw ? JSON.parse(raw) : [];
+      return new Set(Array.isArray(data) ? data.filter((key) => typeof key === "string") : []);
+    } catch (err) {
+      return new Set();
+    }
+  }
+
+  function saveDone() {
+    try {
+      localStorage.setItem(KEY_DONE, JSON.stringify(Array.from(done)));
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  function rememberDone(key) {
+    if (!key || done.has(key)) return;
+    done.add(key);
+    saveDone();
+    renderDone();
+  }
+
   function loadSession() {
     try {
       const raw = localStorage.getItem(KEY_SESSION);
@@ -137,16 +168,18 @@
     }
   }
 
+  function isPhone() {
+    const coarse = window.matchMedia("(pointer: coarse)").matches;
+    const shortSide = Math.min(window.screen.width || 0, window.screen.height || 0);
+    return coarse && shortSide <= 500;
+  }
+
   function deviceInfo() {
     return {
-      userAgent: navigator.userAgent,
-      platform: navigator.platform || "",
-      language: navigator.language || "",
+      screen_w: Math.round(window.screen.width || 0),
+      screen_h: Math.round(window.screen.height || 0),
       dpr: window.devicePixelRatio || 1,
-      screen: { w: window.screen.width, h: window.screen.height },
-      viewport: { w: window.innerWidth, h: window.innerHeight },
-      touchPoints: navigator.maxTouchPoints || 0,
-      pointerCoarse: window.matchMedia("(pointer: coarse)").matches,
+      user_agent: (navigator.userAgent || "unknown").slice(0, 1000),
     };
   }
 
@@ -198,6 +231,9 @@
             setStatus(`Upload paused: ${error.message || "request failed"}`);
             return;
           }
+          if (item.kind === "sample" && item.doneKey && session && item.payload.writer_id === session.writer.id) {
+            rememberDone(item.doneKey);
+          }
           queue.shift();
           persistQueue();
         }
@@ -222,6 +258,32 @@
     };
   }
 
+  function stepKey(index) {
+    const task = taskAt(index);
+    return `${task.prompt.id}#${task.rep + 1}`;
+  }
+
+  function doneCount() {
+    let count = 0;
+    for (let i = 0; i < totalSteps(); i += 1) {
+      if (done.has(stepKey(i))) count += 1;
+    }
+    return count;
+  }
+
+  function firstUndone() {
+    for (let i = 0; i < totalSteps(); i += 1) {
+      if (!done.has(stepKey(i))) return i;
+    }
+    return totalSteps();
+  }
+
+  function renderDone() {
+    const text = `${doneCount()} of ${totalSteps()} done`;
+    progressEl.textContent = text;
+    if (breakCount) breakCount.textContent = text;
+  }
+
   function sizeClass(text) {
     const n = Array.from(text).length;
     if (n <= 2) return "size-xl";
@@ -231,16 +293,23 @@
     return "size-xs";
   }
 
-  function showSetup() {
-    screenSetup.hidden = false;
+  function hideCapture() {
+    screenSetup.hidden = true;
     screenWrite.hidden = true;
     screenThanks.hidden = true;
+    screenBreak.hidden = true;
     document.body.classList.remove("writing");
   }
 
+  function showSetup() {
+    hideCapture();
+    screenPhone.hidden = true;
+    screenSetup.hidden = false;
+  }
+
   function showWrite() {
-    screenSetup.hidden = true;
-    screenThanks.hidden = true;
+    hideCapture();
+    screenPhone.hidden = true;
     screenWrite.hidden = false;
     document.body.classList.add("writing");
     whoEl.textContent = session.writer.nickname;
@@ -250,12 +319,18 @@
   }
 
   function showThanks() {
-    screenSetup.hidden = true;
-    screenWrite.hidden = true;
+    hideCapture();
+    screenPhone.hidden = true;
     screenThanks.hidden = false;
-    document.body.classList.remove("writing");
     setStatus(statusFromQueue());
     flush();
+  }
+
+  function showBreak() {
+    hideCapture();
+    screenPhone.hidden = true;
+    screenBreak.hidden = false;
+    renderDone();
   }
 
   function showPrompt() {
@@ -264,7 +339,7 @@
     activeId = null;
     t0 = performance.now();
     writeError.hidden = true;
-    progressEl.textContent = `${session.index + 1} / ${totalSteps()}`;
+    renderDone();
     kindEl.textContent = KIND_LABEL[task.prompt.kind] || task.prompt.kind;
     promptEl.textContent = task.prompt.text;
     promptEl.className = `prompt-text ${sizeClass(task.prompt.text)}`;
@@ -414,12 +489,21 @@
       canvas_w: Math.round(rect.width),
       canvas_h: Math.round(rect.height),
       dpr: window.devicePixelRatio || 1,
-      screen_w: Math.max(1, window.screen.width || 1),
-      screen_h: Math.max(1, window.screen.height || 1),
+      screen_w: Math.max(1, Math.round(window.screen.width || 1)),
+      screen_h: Math.max(1, Math.round(window.screen.height || 1)),
       user_agent: (navigator.userAgent || "unknown").slice(0, 1000),
       skipped: Boolean(skipped),
     };
-    if (!enqueue({ kind: "sample", payload: sample })) {
+    const doneKey = stepKey(session.index);
+    if (!flushing) {
+      queue = queue.filter((item) => !(
+        item.kind === "sample" &&
+        item.doneKey === doneKey &&
+        item.payload.writer_id === session.writer.id
+      ));
+      persistQueue();
+    }
+    if (!enqueue({ kind: "sample", payload: sample, doneKey })) {
       showWriteError("This device is out of storage. Stay online so saved writing can upload, then try again.");
       return;
     }
@@ -434,6 +518,8 @@
     const ok = window.confirm("Start over as a new writer? Samples already saved on this device will still upload.");
     if (!ok) return;
     localStorage.removeItem(KEY_SESSION);
+    localStorage.removeItem(KEY_DONE);
+    done = new Set();
     session = null;
     strokes = [];
     showSetup();
@@ -484,6 +570,12 @@
     btnNext.addEventListener("click", () => commit(false));
     document.getElementById("btn-restart").addEventListener("click", startOver);
     document.getElementById("btn-again").addEventListener("click", startOver);
+    document.getElementById("btn-break").addEventListener("click", showBreak);
+    document.getElementById("btn-continue").addEventListener("click", () => {
+      if (!session) return;
+      if (session.index >= totalSteps()) showThanks();
+      else showWrite();
+    });
 
     canvas.addEventListener("pointerdown", onPointerDown, { passive: false });
     canvas.addEventListener("pointermove", onPointerMove, { passive: false });
@@ -543,11 +635,16 @@
       return;
     }
     queue = loadQueue();
+    done = loadDone();
     session = loadSession();
     bind();
     if (!configured()) {
       banner.hidden = false;
       banner.textContent = "Uploads are off until SUPABASE_URL and SUPABASE_ANON_KEY are set in config.js. Writing still saves on this device.";
+    }
+    if (session) {
+      session.index = firstUndone();
+      saveSession();
     }
     if (session && session.index >= totalSteps()) showThanks();
     else if (session) showWrite();
@@ -555,5 +652,26 @@
     flush();
   }
 
-  init();
+  function showPhoneGate() {
+    hideCapture();
+    screenPhone.hidden = false;
+    const link = new URL(location.href);
+    link.search = "";
+    link.hash = "";
+    const holder = document.getElementById("phone-qr");
+    if (!holder || holder.childElementCount || typeof qrcode !== "function") return;
+    const code = qrcode(0, "M");
+    code.addData(link.toString());
+    code.make();
+    holder.innerHTML = code.createSvgTag({
+      cellSize: 4,
+      margin: 8,
+      scalable: true,
+      alt: "QR code for this page",
+      title: "Open on your phone",
+    });
+  }
+
+  if (!isPhone()) showPhoneGate();
+  else init();
 }());
