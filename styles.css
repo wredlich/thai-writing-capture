@@ -60,9 +60,12 @@ html, body {
 html.need-phone #screen-setup,
 html.need-phone #screen-write,
 html.need-phone #screen-thanks,
-html.need-phone #screen-break { display: none !important; }
+html.need-phone #screen-break,
+html.need-phone #screen-invite { display: none !important; }
 
 html.need-phone #screen-phone { display: block !important; }
+
+html.booting .screen { display: none !important; }
 
 button, input { font: inherit; color: inherit; }
 
@@ -388,16 +391,37 @@ body.writing {
 }
 
 .upload-status {
-  margin: 0 16px 4px;
-  color: var(--muted);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin: 0 16px;
+  min-height: 0;
+  color: var(--seal);
   font-size: 0.85rem;
-  min-height: 1.2em;
+  text-align: center;
+}
+
+.upload-check {
+  color: var(--ok);
+  display: block;
+}
+
+.upload-check.fade {
+  animation: upload-fade 1.5s ease forwards;
+}
+
+@keyframes upload-fade {
+  0% { opacity: 0; }
+  12% { opacity: 1; }
+  65% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 .toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
   align-items: center;
   padding: 8px 14px calc(12px + env(safe-area-inset-bottom));
 }
@@ -417,20 +441,40 @@ body.writing {
   border-radius: 12px;
 }
 
-.toolbar .ghost, .toolbar .primary { width: auto; }
+.toolbar .ghost, .toolbar .primary { width: 100%; }
 
-.toolbar-right {
-  margin-left: auto;
-  display: flex;
-  gap: 8px;
+.invite-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
 }
+
+.invite-list li {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+
+.invite-list a {
+  color: var(--seal);
+  word-break: break-all;
+}
+
+h2 { font-size: 1.15rem; margin: 18px 0 8px; }
 
 .echo-note {
   font-size: 1.05rem;
   margin: 18px 0;
 }
 
-#btn-again, #btn-sign-out { margin-top: 12px; }
+#btn-sign-out { margin-top: 12px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .upload-check.fade { animation: none; opacity: 1; }
+}
 
 @media (max-height: 560px) {
   .kind, .style-help { display: none; }

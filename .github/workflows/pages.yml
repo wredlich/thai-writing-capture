@@ -27,6 +27,9 @@ jobs:
       - name: Check prompt list
         run: python3 scripts/check_prompts.py
 
+      - name: Check review tool
+        run: python3 -m scripts.review --self-test
+
       - name: Collect site
         run: |
           mkdir -p _site/fonts
