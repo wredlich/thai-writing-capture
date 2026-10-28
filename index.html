@@ -7,6 +7,13 @@
   <meta name="color-scheme" content="light">
   <title>Write Echo — help teach a computer to read Thai handwriting</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <script>
+    (function () {
+      var coarse = window.matchMedia("(pointer: coarse)").matches;
+      var shortSide = Math.min(window.screen.width || 0, window.screen.height || 0);
+      if (!(coarse && shortSide <= 500)) document.documentElement.classList.add("need-phone");
+    })();
+  </script>
   <link rel="preload" href="fonts/noto-serif-thai-thai-600.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -69,7 +76,7 @@
             <p id="who" class="who"></p>
           </div>
         </div>
-        <p id="progress" class="progress" aria-live="polite">1 / 183</p>
+        <p id="progress" class="progress" aria-live="polite">0 of 183 done</p>
         <button id="btn-restart" type="button" class="text-btn">Start over</button>
       </header>
       <p id="list-warning" class="banner" hidden>The prompt list changed since this session started. Continuing at your saved place.</p>
@@ -87,11 +94,41 @@
       <p id="upload-status" class="upload-status" role="status"></p>
       <footer class="toolbar">
         <button id="btn-clear" type="button" class="ghost" disabled>Clear</button>
+        <button id="btn-break" type="button" class="text-btn">Take a break</button>
         <div class="toolbar-right">
           <button id="btn-skip" type="button" class="ghost">Skip</button>
           <button id="btn-next" type="button" class="primary" disabled>Next</button>
         </div>
       </footer>
+    </div>
+  </main>
+
+  <main id="screen-break" class="screen" hidden>
+    <div class="setup-wrap">
+      <header class="brand">
+        <span class="seal" aria-hidden="true">W</span>
+        <div>
+          <p class="wordmark">Write Echo</p>
+          <h1>Take a break</h1>
+        </div>
+      </header>
+      <p id="break-count" class="echo-note">0 of 183 done</p>
+      <p>Your place is saved on this phone. Open this page again here when you want to continue.</p>
+      <button id="btn-continue" type="button" class="primary">Continue</button>
+    </div>
+  </main>
+
+  <main id="screen-phone" class="screen phone-gate" hidden>
+    <div class="setup-wrap">
+      <header class="brand">
+        <span class="seal" aria-hidden="true">W</span>
+        <div>
+          <p class="wordmark">Write Echo</p>
+          <h1>Please open this page on your phone</h1>
+        </div>
+      </header>
+      <p>Writing works on a phone. Point your phone camera at this code.</p>
+      <div id="phone-qr" role="img" aria-label="QR code for this page"></div>
     </div>
   </main>
 
@@ -114,6 +151,7 @@
   <noscript>
     <p class="banner">Write Echo needs JavaScript to record strokes.</p>
   </noscript>
+  <script src="qrcode.js"></script>
   <script src="config.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js"></script>
   <script src="app.js"></script>
