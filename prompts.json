@@ -1,0 +1,1502 @@
+[
+  {
+    "id": "consonant-ko-kai",
+    "text": "ก",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-kho-khai",
+    "text": "ข",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-kho-khuat",
+    "text": "ฃ",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-kho-khwai",
+    "text": "ค",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-kho-khon",
+    "text": "ฅ",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-kho-rakhang",
+    "text": "ฆ",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-ngo-ngu",
+    "text": "ง",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-cho-chan",
+    "text": "จ",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-cho-ching",
+    "text": "ฉ",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-cho-chang",
+    "text": "ช",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-so-so",
+    "text": "ซ",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-cho-choe",
+    "text": "ฌ",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-yo-ying",
+    "text": "ญ",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-do-chada",
+    "text": "ฎ",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-to-patak",
+    "text": "ฏ",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-tho-than",
+    "text": "ฐ",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-tho-nangmontho",
+    "text": "ฑ",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-tho-phuthao",
+    "text": "ฒ",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-no-nen",
+    "text": "ณ",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-do-dek",
+    "text": "ด",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-to-tao",
+    "text": "ต",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-tho-thung",
+    "text": "ถ",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-tho-thahan",
+    "text": "ท",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-tho-thong",
+    "text": "ธ",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-no-nu",
+    "text": "น",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-bo-baimai",
+    "text": "บ",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-po-pla",
+    "text": "ป",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-pho-phung",
+    "text": "ผ",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-fo-fa",
+    "text": "ฝ",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-pho-phan",
+    "text": "พ",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-fo-fan",
+    "text": "ฟ",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-pho-samphao",
+    "text": "ภ",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-mo-ma",
+    "text": "ม",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-yo-yak",
+    "text": "ย",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-ro-ruea",
+    "text": "ร",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-lo-ling",
+    "text": "ล",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-wo-waen",
+    "text": "ว",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-so-sala",
+    "text": "ศ",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-so-ruesi",
+    "text": "ษ",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-so-suea",
+    "text": "ส",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-ho-hip",
+    "text": "ห",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-lo-chula",
+    "text": "ฬ",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-o-ang",
+    "text": "อ",
+    "kind": "consonant"
+  },
+  {
+    "id": "consonant-ho-nokhuk",
+    "text": "ฮ",
+    "kind": "consonant"
+  },
+  {
+    "id": "vowel-sara-a",
+    "text": "อะ",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-aa",
+    "text": "อา",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-mai-han-akat",
+    "text": "อั",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-i",
+    "text": "อิ",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-ii",
+    "text": "อี",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-ue",
+    "text": "อึ",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-uee",
+    "text": "อือ",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-u",
+    "text": "อุ",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-uu",
+    "text": "อู",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-e",
+    "text": "เอ",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-e-short",
+    "text": "เอะ",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-ae",
+    "text": "แอ",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-ae-short",
+    "text": "แอะ",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-o",
+    "text": "โอ",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-o-short",
+    "text": "โอะ",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-o-ang",
+    "text": "ออ",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-o-ang-short",
+    "text": "เอาะ",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-oe",
+    "text": "เออ",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-oe-short",
+    "text": "เออะ",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-ia",
+    "text": "เอีย",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-ia-short",
+    "text": "เอียะ",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-uea",
+    "text": "เอือ",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-uea-short",
+    "text": "เอือะ",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-ua",
+    "text": "อัว",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-ua-short",
+    "text": "อัวะ",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-ai-maimuan",
+    "text": "ใอ",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-ai-maimalai",
+    "text": "ไอ",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-am",
+    "text": "อำ",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-sara-ao",
+    "text": "เอา",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-rue",
+    "text": "ฤ",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-rue-long",
+    "text": "ฤๅ",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-lue",
+    "text": "ฦ",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-lue-long",
+    "text": "ฦๅ",
+    "kind": "vowel"
+  },
+  {
+    "id": "vowel-mai-taikhu",
+    "text": "เอ็",
+    "kind": "vowel"
+  },
+  {
+    "id": "tone-mai-ek",
+    "text": "อ่",
+    "kind": "tone"
+  },
+  {
+    "id": "tone-mai-tho",
+    "text": "อ้",
+    "kind": "tone"
+  },
+  {
+    "id": "tone-mai-tri",
+    "text": "อ๊",
+    "kind": "tone"
+  },
+  {
+    "id": "tone-mai-chattawa",
+    "text": "อ๋",
+    "kind": "tone"
+  },
+  {
+    "id": "mark-thanthakhat",
+    "text": "อ์",
+    "kind": "mark"
+  },
+  {
+    "id": "mark-maiyamok",
+    "text": "ๆ",
+    "kind": "mark"
+  },
+  {
+    "id": "mark-paiyannoi",
+    "text": "ฯ",
+    "kind": "mark"
+  },
+  {
+    "id": "mark-paiyannoi-la",
+    "text": "ฯลฯ",
+    "kind": "mark"
+  },
+  {
+    "id": "digit-thai-0",
+    "text": "๐",
+    "kind": "digit"
+  },
+  {
+    "id": "digit-thai-1",
+    "text": "๑",
+    "kind": "digit"
+  },
+  {
+    "id": "digit-thai-2",
+    "text": "๒",
+    "kind": "digit"
+  },
+  {
+    "id": "digit-thai-3",
+    "text": "๓",
+    "kind": "digit"
+  },
+  {
+    "id": "digit-thai-4",
+    "text": "๔",
+    "kind": "digit"
+  },
+  {
+    "id": "digit-thai-5",
+    "text": "๕",
+    "kind": "digit"
+  },
+  {
+    "id": "digit-thai-6",
+    "text": "๖",
+    "kind": "digit"
+  },
+  {
+    "id": "digit-thai-7",
+    "text": "๗",
+    "kind": "digit"
+  },
+  {
+    "id": "digit-thai-8",
+    "text": "๘",
+    "kind": "digit"
+  },
+  {
+    "id": "digit-thai-9",
+    "text": "๙",
+    "kind": "digit"
+  },
+  {
+    "id": "digit-arabic-0",
+    "text": "0",
+    "kind": "digit"
+  },
+  {
+    "id": "digit-arabic-1",
+    "text": "1",
+    "kind": "digit"
+  },
+  {
+    "id": "digit-arabic-2",
+    "text": "2",
+    "kind": "digit"
+  },
+  {
+    "id": "digit-arabic-3",
+    "text": "3",
+    "kind": "digit"
+  },
+  {
+    "id": "digit-arabic-4",
+    "text": "4",
+    "kind": "digit"
+  },
+  {
+    "id": "digit-arabic-5",
+    "text": "5",
+    "kind": "digit"
+  },
+  {
+    "id": "digit-arabic-6",
+    "text": "6",
+    "kind": "digit"
+  },
+  {
+    "id": "digit-arabic-7",
+    "text": "7",
+    "kind": "digit"
+  },
+  {
+    "id": "digit-arabic-8",
+    "text": "8",
+    "kind": "digit"
+  },
+  {
+    "id": "digit-arabic-9",
+    "text": "9",
+    "kind": "digit"
+  },
+  {
+    "id": "word-001",
+    "text": "กิน",
+    "kind": "word"
+  },
+  {
+    "id": "word-002",
+    "text": "เพื่อน",
+    "kind": "word"
+  },
+  {
+    "id": "word-003",
+    "text": "เที่ยว",
+    "kind": "word"
+  },
+  {
+    "id": "word-004",
+    "text": "ไม่",
+    "kind": "word"
+  },
+  {
+    "id": "word-005",
+    "text": "นำ้",
+    "kind": "word"
+  },
+  {
+    "id": "word-006",
+    "text": "ใคร",
+    "kind": "word"
+  },
+  {
+    "id": "word-007",
+    "text": "ก๋วยเตี๋ยว",
+    "kind": "word"
+  },
+  {
+    "id": "word-008",
+    "text": "มี",
+    "kind": "word"
+  },
+  {
+    "id": "word-009",
+    "text": "ถึง",
+    "kind": "word"
+  },
+  {
+    "id": "word-010",
+    "text": "มือ",
+    "kind": "word"
+  },
+  {
+    "id": "word-011",
+    "text": "คุณ",
+    "kind": "word"
+  },
+  {
+    "id": "word-012",
+    "text": "ดู",
+    "kind": "word"
+  },
+  {
+    "id": "word-013",
+    "text": "เก่ง",
+    "kind": "word"
+  },
+  {
+    "id": "word-014",
+    "text": "แม่",
+    "kind": "word"
+  },
+  {
+    "id": "word-015",
+    "text": "โลก",
+    "kind": "word"
+  },
+  {
+    "id": "word-016",
+    "text": "ใจ",
+    "kind": "word"
+  },
+  {
+    "id": "word-017",
+    "text": "ได้",
+    "kind": "word"
+  },
+  {
+    "id": "word-018",
+    "text": "มา",
+    "kind": "word"
+  },
+  {
+    "id": "word-019",
+    "text": "จะ",
+    "kind": "word"
+  },
+  {
+    "id": "word-020",
+    "text": "วัน",
+    "kind": "word"
+  },
+  {
+    "id": "word-021",
+    "text": "เป็น",
+    "kind": "word"
+  },
+  {
+    "id": "word-022",
+    "text": "เขา",
+    "kind": "word"
+  },
+  {
+    "id": "word-023",
+    "text": "เธอ",
+    "kind": "word"
+  },
+  {
+    "id": "word-024",
+    "text": "เกาะ",
+    "kind": "word"
+  },
+  {
+    "id": "word-025",
+    "text": "ตัว",
+    "kind": "word"
+  },
+  {
+    "id": "word-026",
+    "text": "ที่",
+    "kind": "word"
+  },
+  {
+    "id": "word-027",
+    "text": "ก๊อก",
+    "kind": "word"
+  },
+  {
+    "id": "word-028",
+    "text": "ต่างๆ",
+    "kind": "word"
+  },
+  {
+    "id": "word-029",
+    "text": "วันจันทร์",
+    "kind": "word"
+  },
+  {
+    "id": "word-030",
+    "text": "ยักษ์",
+    "kind": "word"
+  },
+  {
+    "id": "word-031",
+    "text": "หนึ่ง",
+    "kind": "word"
+  },
+  {
+    "id": "word-032",
+    "text": "โต๊ะ",
+    "kind": "word"
+  },
+  {
+    "id": "word-033",
+    "text": "และ",
+    "kind": "word"
+  },
+  {
+    "id": "word-034",
+    "text": "ไก่",
+    "kind": "word"
+  },
+  {
+    "id": "word-035",
+    "text": "ไข่",
+    "kind": "word"
+  },
+  {
+    "id": "word-036",
+    "text": "ขวด",
+    "kind": "word"
+  },
+  {
+    "id": "word-037",
+    "text": "ควาย",
+    "kind": "word"
+  },
+  {
+    "id": "word-038",
+    "text": "คน",
+    "kind": "word"
+  },
+  {
+    "id": "word-039",
+    "text": "ระฆัง",
+    "kind": "word"
+  },
+  {
+    "id": "word-040",
+    "text": "งู",
+    "kind": "word"
+  },
+  {
+    "id": "word-041",
+    "text": "จาน",
+    "kind": "word"
+  },
+  {
+    "id": "word-042",
+    "text": "ฉิ่ง",
+    "kind": "word"
+  },
+  {
+    "id": "word-043",
+    "text": "ช้าง",
+    "kind": "word"
+  },
+  {
+    "id": "word-044",
+    "text": "โซ่",
+    "kind": "word"
+  },
+  {
+    "id": "word-045",
+    "text": "เฌอ",
+    "kind": "word"
+  },
+  {
+    "id": "word-046",
+    "text": "หญิง",
+    "kind": "word"
+  },
+  {
+    "id": "word-047",
+    "text": "ชฎา",
+    "kind": "word"
+  },
+  {
+    "id": "word-048",
+    "text": "ปฏัก",
+    "kind": "word"
+  },
+  {
+    "id": "word-049",
+    "text": "ฐาน",
+    "kind": "word"
+  },
+  {
+    "id": "word-050",
+    "text": "นางมณโฑ",
+    "kind": "word"
+  },
+  {
+    "id": "word-051",
+    "text": "ผู้เฒ่า",
+    "kind": "word"
+  },
+  {
+    "id": "word-052",
+    "text": "เณร",
+    "kind": "word"
+  },
+  {
+    "id": "word-053",
+    "text": "เด็ก",
+    "kind": "word"
+  },
+  {
+    "id": "word-054",
+    "text": "เต่า",
+    "kind": "word"
+  },
+  {
+    "id": "word-055",
+    "text": "ถุง",
+    "kind": "word"
+  },
+  {
+    "id": "word-056",
+    "text": "ทหาร",
+    "kind": "word"
+  },
+  {
+    "id": "word-057",
+    "text": "ธง",
+    "kind": "word"
+  },
+  {
+    "id": "word-058",
+    "text": "หนู",
+    "kind": "word"
+  },
+  {
+    "id": "word-059",
+    "text": "ใบไม้",
+    "kind": "word"
+  },
+  {
+    "id": "word-060",
+    "text": "ปลา",
+    "kind": "word"
+  },
+  {
+    "id": "word-061",
+    "text": "ผึ้ง",
+    "kind": "word"
+  },
+  {
+    "id": "word-062",
+    "text": "ฝา",
+    "kind": "word"
+  },
+  {
+    "id": "word-063",
+    "text": "พาน",
+    "kind": "word"
+  },
+  {
+    "id": "word-064",
+    "text": "ฟัน",
+    "kind": "word"
+  },
+  {
+    "id": "word-065",
+    "text": "สำเภา",
+    "kind": "word"
+  },
+  {
+    "id": "word-066",
+    "text": "ม้า",
+    "kind": "word"
+  },
+  {
+    "id": "word-067",
+    "text": "เรือ",
+    "kind": "word"
+  },
+  {
+    "id": "word-068",
+    "text": "ลิง",
+    "kind": "word"
+  },
+  {
+    "id": "word-069",
+    "text": "แหวน",
+    "kind": "word"
+  },
+  {
+    "id": "word-070",
+    "text": "ศาลา",
+    "kind": "word"
+  },
+  {
+    "id": "word-071",
+    "text": "ฤๅษี",
+    "kind": "word"
+  },
+  {
+    "id": "word-072",
+    "text": "เสือ",
+    "kind": "word"
+  },
+  {
+    "id": "word-073",
+    "text": "หีบ",
+    "kind": "word"
+  },
+  {
+    "id": "word-074",
+    "text": "จุฬา",
+    "kind": "word"
+  },
+  {
+    "id": "word-075",
+    "text": "อ่าง",
+    "kind": "word"
+  },
+  {
+    "id": "word-076",
+    "text": "นกฮูก",
+    "kind": "word"
+  },
+  {
+    "id": "word-077",
+    "text": "สวัสดี",
+    "kind": "word"
+  },
+  {
+    "id": "word-078",
+    "text": "ขอบคุณ",
+    "kind": "word"
+  },
+  {
+    "id": "word-079",
+    "text": "ขอโทษ",
+    "kind": "word"
+  },
+  {
+    "id": "word-080",
+    "text": "สอง",
+    "kind": "word"
+  },
+  {
+    "id": "word-081",
+    "text": "สาม",
+    "kind": "word"
+  },
+  {
+    "id": "word-082",
+    "text": "สี่",
+    "kind": "word"
+  },
+  {
+    "id": "word-083",
+    "text": "ห้า",
+    "kind": "word"
+  },
+  {
+    "id": "word-084",
+    "text": "หก",
+    "kind": "word"
+  },
+  {
+    "id": "word-085",
+    "text": "เจ็ด",
+    "kind": "word"
+  },
+  {
+    "id": "word-086",
+    "text": "แปด",
+    "kind": "word"
+  },
+  {
+    "id": "word-087",
+    "text": "เก้า",
+    "kind": "word"
+  },
+  {
+    "id": "word-088",
+    "text": "สิบ",
+    "kind": "word"
+  },
+  {
+    "id": "word-089",
+    "text": "วันอังคาร",
+    "kind": "word"
+  },
+  {
+    "id": "word-090",
+    "text": "วันพุธ",
+    "kind": "word"
+  },
+  {
+    "id": "word-091",
+    "text": "วันพฤหัสบดี",
+    "kind": "word"
+  },
+  {
+    "id": "word-092",
+    "text": "วันศุกร์",
+    "kind": "word"
+  },
+  {
+    "id": "word-093",
+    "text": "วันเสาร์",
+    "kind": "word"
+  },
+  {
+    "id": "word-094",
+    "text": "วันอาทิตย์",
+    "kind": "word"
+  },
+  {
+    "id": "word-095",
+    "text": "ทำ",
+    "kind": "word"
+  },
+  {
+    "id": "word-096",
+    "text": "รู้",
+    "kind": "word"
+  },
+  {
+    "id": "word-097",
+    "text": "เขียน",
+    "kind": "word"
+  },
+  {
+    "id": "word-098",
+    "text": "อ่าน",
+    "kind": "word"
+  },
+  {
+    "id": "word-099",
+    "text": "พูด",
+    "kind": "word"
+  },
+  {
+    "id": "word-100",
+    "text": "เดิน",
+    "kind": "word"
+  },
+  {
+    "id": "word-101",
+    "text": "วิ่ง",
+    "kind": "word"
+  },
+  {
+    "id": "word-102",
+    "text": "นั่ง",
+    "kind": "word"
+  },
+  {
+    "id": "word-103",
+    "text": "นอน",
+    "kind": "word"
+  },
+  {
+    "id": "word-104",
+    "text": "เปิด",
+    "kind": "word"
+  },
+  {
+    "id": "word-105",
+    "text": "ปิด",
+    "kind": "word"
+  },
+  {
+    "id": "word-106",
+    "text": "ซื้อ",
+    "kind": "word"
+  },
+  {
+    "id": "word-107",
+    "text": "ขาย",
+    "kind": "word"
+  },
+  {
+    "id": "word-108",
+    "text": "เรียน",
+    "kind": "word"
+  },
+  {
+    "id": "word-109",
+    "text": "สอน",
+    "kind": "word"
+  },
+  {
+    "id": "word-110",
+    "text": "เล่น",
+    "kind": "word"
+  },
+  {
+    "id": "word-111",
+    "text": "ฟัง",
+    "kind": "word"
+  },
+  {
+    "id": "word-112",
+    "text": "ใช้",
+    "kind": "word"
+  },
+  {
+    "id": "word-113",
+    "text": "หา",
+    "kind": "word"
+  },
+  {
+    "id": "word-114",
+    "text": "รัก",
+    "kind": "word"
+  },
+  {
+    "id": "word-115",
+    "text": "ชอบ",
+    "kind": "word"
+  },
+  {
+    "id": "word-116",
+    "text": "ช่วย",
+    "kind": "word"
+  },
+  {
+    "id": "word-117",
+    "text": "รอ",
+    "kind": "word"
+  },
+  {
+    "id": "word-118",
+    "text": "เจอ",
+    "kind": "word"
+  },
+  {
+    "id": "word-119",
+    "text": "เข้า",
+    "kind": "word"
+  },
+  {
+    "id": "word-120",
+    "text": "ออก",
+    "kind": "word"
+  },
+  {
+    "id": "word-121",
+    "text": "ขึ้น",
+    "kind": "word"
+  },
+  {
+    "id": "word-122",
+    "text": "ลง",
+    "kind": "word"
+  },
+  {
+    "id": "word-123",
+    "text": "กลับ",
+    "kind": "word"
+  },
+  {
+    "id": "word-124",
+    "text": "เริ่ม",
+    "kind": "word"
+  },
+  {
+    "id": "word-125",
+    "text": "จบ",
+    "kind": "word"
+  },
+  {
+    "id": "word-126",
+    "text": "ถาม",
+    "kind": "word"
+  },
+  {
+    "id": "word-127",
+    "text": "ตอบ",
+    "kind": "word"
+  },
+  {
+    "id": "word-128",
+    "text": "คิด",
+    "kind": "word"
+  },
+  {
+    "id": "word-129",
+    "text": "เข้าใจ",
+    "kind": "word"
+  },
+  {
+    "id": "word-130",
+    "text": "เกิด",
+    "kind": "word"
+  },
+  {
+    "id": "word-131",
+    "text": "เลือก",
+    "kind": "word"
+  },
+  {
+    "id": "word-132",
+    "text": "ใหม่",
+    "kind": "word"
+  },
+  {
+    "id": "word-133",
+    "text": "เก่า",
+    "kind": "word"
+  },
+  {
+    "id": "word-134",
+    "text": "ใหญ่",
+    "kind": "word"
+  },
+  {
+    "id": "word-135",
+    "text": "เล็ก",
+    "kind": "word"
+  },
+  {
+    "id": "word-136",
+    "text": "สวย",
+    "kind": "word"
+  },
+  {
+    "id": "word-137",
+    "text": "ร้อน",
+    "kind": "word"
+  },
+  {
+    "id": "word-138",
+    "text": "เร็ว",
+    "kind": "word"
+  },
+  {
+    "id": "word-139",
+    "text": "ช้า",
+    "kind": "word"
+  },
+  {
+    "id": "word-140",
+    "text": "ใกล้",
+    "kind": "word"
+  },
+  {
+    "id": "word-141",
+    "text": "ไกล",
+    "kind": "word"
+  },
+  {
+    "id": "word-142",
+    "text": "สูง",
+    "kind": "word"
+  },
+  {
+    "id": "word-143",
+    "text": "ตำ่",
+    "kind": "word"
+  },
+  {
+    "id": "word-144",
+    "text": "ง่าย",
+    "kind": "word"
+  },
+  {
+    "id": "word-145",
+    "text": "ยาก",
+    "kind": "word"
+  },
+  {
+    "id": "word-146",
+    "text": "แพง",
+    "kind": "word"
+  },
+  {
+    "id": "word-147",
+    "text": "แดง",
+    "kind": "word"
+  },
+  {
+    "id": "word-148",
+    "text": "เขียว",
+    "kind": "word"
+  },
+  {
+    "id": "word-149",
+    "text": "เหลือง",
+    "kind": "word"
+  },
+  {
+    "id": "word-150",
+    "text": "ขาว",
+    "kind": "word"
+  },
+  {
+    "id": "word-151",
+    "text": "ดำ",
+    "kind": "word"
+  },
+  {
+    "id": "word-152",
+    "text": "ไม้",
+    "kind": "word"
+  },
+  {
+    "id": "word-153",
+    "text": "ไข้",
+    "kind": "word"
+  },
+  {
+    "id": "word-154",
+    "text": "เก๋",
+    "kind": "word"
+  },
+  {
+    "id": "word-155",
+    "text": "ก๋ง",
+    "kind": "word"
+  },
+  {
+    "id": "word-156",
+    "text": "เอ๋",
+    "kind": "word"
+  },
+  {
+    "id": "word-157",
+    "text": "เก๊",
+    "kind": "word"
+  },
+  {
+    "id": "word-158",
+    "text": "เดี๋ยว",
+    "kind": "word"
+  },
+  {
+    "id": "word-159",
+    "text": "เสื้อ",
+    "kind": "word"
+  },
+  {
+    "id": "word-160",
+    "text": "เกลือ",
+    "kind": "word"
+  },
+  {
+    "id": "word-161",
+    "text": "เหลือ",
+    "kind": "word"
+  },
+  {
+    "id": "word-162",
+    "text": "เชื่อ",
+    "kind": "word"
+  },
+  {
+    "id": "word-163",
+    "text": "กลัว",
+    "kind": "word"
+  },
+  {
+    "id": "word-164",
+    "text": "รวม",
+    "kind": "word"
+  },
+  {
+    "id": "word-165",
+    "text": "ข่าว",
+    "kind": "word"
+  },
+  {
+    "id": "word-166",
+    "text": "ดาว",
+    "kind": "word"
+  },
+  {
+    "id": "word-167",
+    "text": "เรา",
+    "kind": "word"
+  },
+  {
+    "id": "word-168",
+    "text": "เลี้ยง",
+    "kind": "word"
+  },
+  {
+    "id": "word-169",
+    "text": "เปลี่ยน",
+    "kind": "word"
+  },
+  {
+    "id": "word-170",
+    "text": "เสียง",
+    "kind": "word"
+  },
+  {
+    "id": "word-171",
+    "text": "เดียว",
+    "kind": "word"
+  },
+  {
+    "id": "word-172",
+    "text": "เปรี้ยว",
+    "kind": "word"
+  },
+  {
+    "id": "word-173",
+    "text": "เทียน",
+    "kind": "word"
+  },
+  {
+    "id": "word-174",
+    "text": "พ่อ",
+    "kind": "word"
+  },
+  {
+    "id": "word-175",
+    "text": "ลูก",
+    "kind": "word"
+  },
+  {
+    "id": "word-176",
+    "text": "พี่",
+    "kind": "word"
+  },
+  {
+    "id": "word-177",
+    "text": "น้อง",
+    "kind": "word"
+  },
+  {
+    "id": "word-178",
+    "text": "ปู่",
+    "kind": "word"
+  },
+  {
+    "id": "word-179",
+    "text": "ย่า",
+    "kind": "word"
+  },
+  {
+    "id": "word-180",
+    "text": "ตา",
+    "kind": "word"
+  },
+  {
+    "id": "word-181",
+    "text": "ยาย",
+    "kind": "word"
+  },
+  {
+    "id": "word-182",
+    "text": "ลุง",
+    "kind": "word"
+  },
+  {
+    "id": "word-183",
+    "text": "ป้า",
+    "kind": "word"
+  },
+  {
+    "id": "word-184",
+    "text": "ครู",
+    "kind": "word"
+  },
+  {
+    "id": "word-185",
+    "text": "หมอ",
+    "kind": "word"
+  },
+  {
+    "id": "word-186",
+    "text": "ชื่อ",
+    "kind": "word"
+  },
+  {
+    "id": "word-187",
+    "text": "เด็กๆ",
+    "kind": "word"
+  },
+  {
+    "id": "word-188",
+    "text": "ผู้หญิง",
+    "kind": "word"
+  },
+  {
+    "id": "word-189",
+    "text": "ผู้ชาย",
+    "kind": "word"
+  },
+  {
+    "id": "word-190",
+    "text": "ครอบครัว",
+    "kind": "word"
+  },
+  {
+    "id": "word-191",
+    "text": "คนไทย",
+    "kind": "word"
+  },
+  {
+    "id": "word-192",
+    "text": "ข้าว",
+    "kind": "word"
+  },
+  {
+    "id": "word-193",
+    "text": "อาหาร",
+    "kind": "word"
+  },
+  {
+    "id": "word-194",
+    "text": "ขนม",
+    "kind": "word"
+  }
+]
