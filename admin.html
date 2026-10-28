@@ -37,6 +37,16 @@
         <p id="signed-in-as" class="lede"></p>
         <button id="btn-export" class="primary" type="button">Download JSON</button>
         <p id="export-status" class="fine" role="status"></p>
+        <h2>Invite links</h2>
+        <form id="invite-form">
+          <label class="field">
+            <span>Label</span>
+            <input id="invite-label" name="label" maxlength="80" required autocomplete="off" placeholder="Bangkok workshop">
+          </label>
+          <button id="btn-invite" class="primary" type="submit">Create invite link</button>
+        </form>
+        <p id="invite-status" class="fine" role="status"></p>
+        <ul id="invite-list" class="invite-list"></ul>
         <button id="btn-sign-out" class="ghost" type="button">Sign out</button>
       </section>
       <p class="fine"><a href="index.html">Back to Write Echo</a></p>

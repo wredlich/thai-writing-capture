@@ -19,7 +19,9 @@ Open [supabase.com/dashboard](https://supabase.com/dashboard) and sign in with G
 
 In the Supabase dashboard open **SQL Editor → New query**, paste the whole of `supabase/schema.sql`, and run it. The script is idempotent: tables and indexes use `if not exists`, and policies are dropped before they are created, so pasting it again is safe.
 
-It creates `writers`, `samples`, and `admins`. Strokes are a `jsonb` column. There is no storage bucket. The anon role can insert and cannot read. A signed-in user can read `writers` and `samples` only when `admins.email` equals the email on their token.
+It creates `writers`, `samples`, `admins`, and `invites`. Strokes are a `jsonb` column. There is no storage bucket. The anon role can insert writers and samples and cannot read. A signed-in user can read `writers` and `samples` only when `admins.email` equals the email on their token.
+
+The live project already has the base tables. Do not paste `schema.sql` into it again. Paste `supabase/migrations/20261028_invites.sql` instead. Until that migration has been run, the capture page keeps the previous behavior and does not require an invite. After it has been run, a new writer is stored only when their invite code exists.
 
 ### 3. Add your email as an admin
 
@@ -66,11 +68,13 @@ You export from https://wredlich.github.io/thai-writing-capture/admin.html — e
 
 ## How a session works
 
-The start screen asks for a nickname, handedness (right, left, or both), an age range, and this consent line: “I agree my anonymous handwriting strokes may be used to train a handwriting recognition model.”
+The start screen asks for a nickname, handedness (right, left, or both), and this consent line: “I agree my anonymous handwriting strokes may be used to train a handwriting recognition model.”
 
-`prompts.json` is the whole prompt list. It has the common consonants, the main vowel forms on อ, the four tone marks on อ, and ten short words. Each prompt is asked three times, so the progress counter runs to 183 (for example `4 / 183`). There are no Thai numerals and no second font or fast copy.
+`prompts.json` is the whole prompt list. It has the common consonants, the main vowel forms on อ, the four tone marks on อ, and ten short words. Each prompt is asked three times, so the progress counter runs to 183 (for example `4 of 183 done`). There are no Thai numerals and no second font or fast copy.
 
-Clear wipes the current canvas. Next saves it. Skip saves the item as skipped. The writer id and the prompt index are kept in localStorage, and samples that have not uploaded yet stay queued there and retry when the device is online.
+Back, Clear, and Next sit on one row under the writing box. Next stays disabled until there is ink. Clear wipes the current canvas. Back returns to the previous prompt; writing it again inserts a new sample. Rows are not updated. A successful upload shows a checkmark that fades out. Text appears only when an upload fails.
+
+The writer id and the finished prompts are kept in localStorage on this phone. Samples that have not uploaded yet stay queued there and retry when the device is online. There is no control for starting over as a new writer.
 
 A sample’s `strokes` field is `[[{x, y, t, pressure, pointerType}, ...], ...]`. `x` and `y` are CSS pixels from the top-left of the canvas. `t` is milliseconds since the prompt was shown.
 
@@ -88,4 +92,33 @@ python3 -m http.server 8000
 
 Open http://localhost:8000/ . Uploads stay queued until `config.js` has real values.
 
-Noto Sans Thai is included under the SIL Open Font License (`fonts/OFL.txt`).
+Noto Serif Thai is included under the SIL Open Font License (`fonts/OFL.txt`).
+
+## Invite links
+
+After `supabase/migrations/20261028_invites.sql` has been run, each helper needs a personal link such as `https://wredlich.github.io/thai-writing-capture/?invite=CODE`. The capture page reads `invite` from the URL and remembers it on that phone. Without a code, a phone sees “You need an invite link” and does not show the writing form. A desktop still shows the phone screen, and its QR code includes the invite when the page was opened with one.
+
+On the admin page, a signed-in admin types a label, creates an 8-character code, and copies the link. The page lists the codes already created. The anon key cannot read the invite table. A database function checks the code during insert.
+
+The download JSON includes `writers`, `samples`, and `invites`. Each new sample also stores its repetition in `rep` (1, 2, or 3). Screen width, screen height, device pixel ratio, and user agent are stored as before: on `writers.device` at signup, and on each sample along with the canvas size.
+
+## Review an export
+
+The review tool reads that JSON file on your own machine. It does not connect to Supabase and it does not use a service key.
+
+```bash
+python3 -m scripts.review write-echo-export.json -o review
+```
+
+Open `review/index.html`. The index lists writers to drop: anyone with at least 3 kept samples who is flagged on half or more of them. Each prompt has its own page under `review/prompts/`, with a thumbnail of every sample. Flagged samples have a red border. Samples are grouped and labelled by the invite’s label (`No invite` when the writer has no code).
+
+For each writer, prompt, and repetition, only the newest sample counts. An older rewrite stays on the prompt page, dimmed, and is left out of the score. Samples saved before `rep` existed are numbered in time order.
+
+A sample can be flagged for any of these:
+
+- Near-empty: fewer than 8 points, or a very short path.
+- Scribble or overfill: the path is longer than 6 canvas diagonals, or many strokes run across the box.
+- Too fast: under 180 ms, or faster than 2.2 CSS pixels per millisecond.
+- Too slow: longer than 30 seconds.
+- Abnormal stroke count: far from the other samples of that same prompt.
+- Outlier: the resampled trajectory sits far from other writers on that prompt.

@@ -4,6 +4,7 @@
   const KEY_SESSION = "write-echo.session.v2";
   const KEY_QUEUE = "write-echo.queue.v1";
   const KEY_DONE = "write-echo.done.v1";
+  const KEY_INVITE = "write-echo.invite.v1";
   const KIND_LABEL = {
     consonant: "พยัญชนะ · consonant",
     vowel: "สระ · vowel",
@@ -32,13 +33,16 @@
   const canvas = document.getElementById("pad");
   const hint = document.getElementById("hint");
   const writeError = document.getElementById("write-error");
-  const uploadStatus = document.getElementById("upload-status");
-  const thanksStatus = document.getElementById("thanks-status");
+  const uploadCheck = document.getElementById("upload-check");
+  const uploadText = document.getElementById("upload-text");
+  const thanksCheck = document.getElementById("thanks-check");
+  const thanksText = document.getElementById("thanks-text");
   const screenBreak = document.getElementById("screen-break");
   const screenPhone = document.getElementById("screen-phone");
+  const screenInvite = document.getElementById("screen-invite");
   const breakCount = document.getElementById("break-count");
+  const btnBack = document.getElementById("btn-back");
   const btnClear = document.getElementById("btn-clear");
-  const btnSkip = document.getElementById("btn-skip");
   const btnNext = document.getElementById("btn-next");
   const ctx = canvas.getContext("2d");
 
@@ -56,6 +60,9 @@
   let flushing = false;
   let flushAgain = false;
   let dbClient = null;
+  let invitesOn = false;
+  let legacyColumns = false;
+  let checkTimer = 0;
 
   function readConfig() {
     const cfg = window.THAI_WRITING_CONFIG || {};
@@ -86,6 +93,59 @@
       });
     }
     return dbClient;
+  }
+
+  function normalizeInvite(value) {
+    const code = String(value || "").trim().toLowerCase();
+    return /^[a-z0-9]{4,32}$/.test(code) ? code : "";
+  }
+
+  function readInvite() {
+    try {
+      return normalizeInvite(localStorage.getItem(KEY_INVITE));
+    } catch (err) {
+      return "";
+    }
+  }
+
+  function captureInvite() {
+    const fromUrl = normalizeInvite(new URLSearchParams(location.search).get("invite"));
+    if (!fromUrl) return readInvite();
+    try {
+      localStorage.setItem(KEY_INVITE, fromUrl);
+    } catch (err) { /* the URL still carries the code */ }
+    return fromUrl;
+  }
+
+  async function detectInvites() {
+    const client = db();
+    if (!client) return false;
+    try {
+      const { data, error } = await client.rpc("capture_invites_enabled");
+      return !error && data === true;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  function withoutNewColumns(payload) {
+    const next = Object.assign({}, payload);
+    delete next.invite_code;
+    delete next.rep;
+    return next;
+  }
+
+  function isMissingColumn(error) {
+    const code = String(error.code || "");
+    const msg = String(error.message || "").toLowerCase();
+    if (code === "42703" || code === "PGRST204") return true;
+    return msg.includes("invite_code") || msg.includes("schema cache");
+  }
+
+  function isInviteRejection(error) {
+    const code = String(error.code || "");
+    const msg = String(error.message || "").toLowerCase();
+    return code === "42501" || msg.includes("row-level security") || msg.includes("permission denied");
   }
 
   function loadQueue() {
@@ -183,25 +243,61 @@
     };
   }
 
-  function setStatus(text) {
-    uploadStatus.textContent = text;
-    if (!screenThanks.hidden) thanksStatus.textContent = text;
+  function reveal() {
+    document.documentElement.classList.remove("booting");
   }
 
-  function statusFromQueue(note) {
-    const pending = queue.length;
-    if (!configured()) {
-      return pending
-        ? `Saved on this device (${pending} waiting). Add the anon key in config.js to upload.`
-        : "Saved on this device. Add the anon key in config.js to upload.";
+  function clearUploadStatus() {
+    clearTimeout(checkTimer);
+    uploadText.textContent = "";
+    thanksText.textContent = "";
+    uploadCheck.hidden = true;
+    thanksCheck.hidden = true;
+    uploadCheck.classList.remove("fade");
+    thanksCheck.classList.remove("fade");
+  }
+
+  function showUploadedCheck() {
+    uploadText.textContent = "";
+    thanksText.textContent = "";
+    [uploadCheck, thanksCheck].forEach((el) => {
+      el.hidden = false;
+      el.classList.remove("fade");
+      void el.getBoundingClientRect();
+      el.classList.add("fade");
+    });
+    clearTimeout(checkTimer);
+    checkTimer = setTimeout(() => {
+      uploadCheck.hidden = true;
+      thanksCheck.hidden = true;
+    }, 1600);
+  }
+
+  function showUploadError(message) {
+    clearTimeout(checkTimer);
+    uploadCheck.hidden = true;
+    thanksCheck.hidden = true;
+    uploadCheck.classList.remove("fade");
+    thanksCheck.classList.remove("fade");
+    uploadText.textContent = message;
+    thanksText.textContent = message;
+  }
+
+  function rejectWriter(writerId) {
+    queue = queue.filter((item) => item.payload.id !== writerId && item.payload.writer_id !== writerId);
+    persistQueue();
+    clearUploadStatus();
+    if (session && session.writer.id === writerId) {
+      try { localStorage.removeItem(KEY_SESSION); } catch (err) { /* ignore */ }
+      session = null;
     }
-    if (!globalThis.supabase) {
-      return "Upload library did not load. Samples stay on this device.";
+    if (!readInvite()) {
+      showInvite();
+      return;
     }
-    if (note) return note;
-    if (!pending) return "Uploaded";
-    if (!navigator.onLine) return `Offline. ${pending} waiting to upload.`;
-    return `${pending} waiting to upload`;
+    showSetup();
+    banner.hidden = false;
+    banner.textContent = "This invite link is not recognized. Ask for a new link.";
   }
 
   async function flush() {
@@ -210,25 +306,31 @@
       return;
     }
     flushing = true;
+    let stripped = false;
     try {
       do {
         flushAgain = false;
-        if (!queue.length) {
-          setStatus(statusFromQueue());
-          break;
-        }
-        if (!configured() || !navigator.onLine || !db()) {
-          setStatus(statusFromQueue());
-          break;
-        }
-        setStatus("Uploading…");
+        if (!queue.length || !configured() || !navigator.onLine || !db()) break;
         while (queue.length) {
           const item = queue[0];
           const table = item.kind === "writer" ? "writers" : "samples";
           // insert() only. Do not chain .select(): the anon role cannot read.
           const { error } = await db().from(table).insert(item.payload);
           if (error && error.code !== "23505") {
-            setStatus(`Upload paused: ${error.message || "request failed"}`);
+            if (!stripped && isMissingColumn(error)) {
+              stripped = true;
+              legacyColumns = true;
+              queue.forEach((queued) => {
+                queued.payload = withoutNewColumns(queued.payload);
+              });
+              persistQueue();
+              continue;
+            }
+            if (item.kind === "writer" && isInviteRejection(error)) {
+              rejectWriter(item.payload.id);
+              return;
+            }
+            showUploadError(`Upload failed: ${error.message || "request failed"}`);
             return;
           }
           if (item.kind === "sample" && item.doneKey && session && item.payload.writer_id === session.writer.id) {
@@ -236,11 +338,11 @@
           }
           queue.shift();
           persistQueue();
+          showUploadedCheck();
         }
-        setStatus(statusFromQueue());
       } while (flushAgain);
     } catch (err) {
-      setStatus(`Upload paused: ${err.message || "network error"}`);
+      showUploadError(`Upload failed: ${err.message || "network error"}`);
     } finally {
       flushing = false;
     }
@@ -294,10 +396,12 @@
   }
 
   function hideCapture() {
+    reveal();
     screenSetup.hidden = true;
     screenWrite.hidden = true;
     screenThanks.hidden = true;
     screenBreak.hidden = true;
+    screenInvite.hidden = true;
     document.body.classList.remove("writing");
   }
 
@@ -322,7 +426,6 @@
     hideCapture();
     screenPhone.hidden = true;
     screenThanks.hidden = false;
-    setStatus(statusFromQueue());
     flush();
   }
 
@@ -331,6 +434,12 @@
     screenPhone.hidden = true;
     screenBreak.hidden = false;
     renderDone();
+  }
+
+  function showInvite() {
+    hideCapture();
+    screenPhone.hidden = true;
+    screenInvite.hidden = false;
   }
 
   function showPrompt() {
@@ -346,6 +455,7 @@
     styleEl.textContent = `${task.rep + 1} of ${repeats}`;
     styleEl.classList.remove("fast");
     styleHelp.textContent = "เขียนแบบที่คุณเขียนปกติ";
+    btnBack.disabled = session.index <= 0;
     redraw();
   }
 
@@ -462,10 +572,10 @@
     redraw();
   }
 
-  function commit(skipped) {
+  function commit() {
     writeError.hidden = true;
     const hasInk = strokes.some((stroke) => stroke.length);
-    if (!skipped && !hasInk) return;
+    if (!hasInk) return;
     const rect = canvas.getBoundingClientRect();
     if (rect.width < 2 || rect.height < 2) {
       showWriteError("The writing area is not ready yet.");
@@ -492,8 +602,9 @@
       screen_w: Math.max(1, Math.round(window.screen.width || 1)),
       screen_h: Math.max(1, Math.round(window.screen.height || 1)),
       user_agent: (navigator.userAgent || "unknown").slice(0, 1000),
-      skipped: Boolean(skipped),
+      skipped: false,
     };
+    if (!legacyColumns) sample.rep = task.rep + 1;
     const doneKey = stepKey(session.index);
     if (!flushing) {
       queue = queue.filter((item) => !(
@@ -514,21 +625,16 @@
     else showPrompt();
   }
 
-  function startOver() {
-    const ok = window.confirm("Start over as a new writer? Samples already saved on this device will still upload.");
-    if (!ok) return;
-    localStorage.removeItem(KEY_SESSION);
-    localStorage.removeItem(KEY_DONE);
-    done = new Set();
-    session = null;
-    strokes = [];
-    showSetup();
+  function goBack() {
+    if (!session || session.index <= 0) return;
+    session.index -= 1;
+    saveSession();
+    showPrompt();
   }
 
   function refreshStart() {
     const handedness = form.querySelector('input[name="handedness"]:checked');
-    const age = form.querySelector('input[name="age_range"]:checked');
-    btnStart.disabled = !(nicknameInput.value.trim() && handedness && age && consentInput.checked);
+    btnStart.disabled = !(nicknameInput.value.trim() && handedness && consentInput.checked);
   }
 
   function bind() {
@@ -543,10 +649,11 @@
         id: crypto.randomUUID(),
         nickname: nicknameInput.value.trim().slice(0, 80),
         handedness,
-        age_range: form.querySelector('input[name="age_range"]:checked').value,
         consented: true,
         device: deviceInfo(),
       };
+      const invite = captureInvite();
+      if (!legacyColumns && invite) writer.invite_code = invite;
       session = { writer, index: 0, promptCount: prompts.length };
       if (!saveSession() || !enqueue({ kind: "writer", payload: writer })) {
         localStorage.removeItem(KEY_SESSION);
@@ -566,10 +673,8 @@
       t0 = performance.now();
       redraw();
     });
-    btnSkip.addEventListener("click", () => commit(true));
-    btnNext.addEventListener("click", () => commit(false));
-    document.getElementById("btn-restart").addEventListener("click", startOver);
-    document.getElementById("btn-again").addEventListener("click", startOver);
+    btnBack.addEventListener("click", goBack);
+    btnNext.addEventListener("click", commit);
     document.getElementById("btn-break").addEventListener("click", showBreak);
     document.getElementById("btn-continue").addEventListener("click", () => {
       if (!session) return;
@@ -620,23 +725,31 @@
   }
 
   async function init() {
+    const invite = captureInvite();
+    queue = loadQueue();
+    done = loadDone();
+    session = loadSession();
+    invitesOn = await detectInvites();
+    if (invitesOn && !invite && !session) {
+      showInvite();
+      return;
+    }
     try {
       const response = await fetch("prompts.json", { cache: "no-cache" });
       if (!response.ok) throw new Error("status " + response.status);
       prompts = expandPrompts(await response.json());
     } catch (err) {
+      showSetup();
       banner.hidden = false;
       banner.textContent = "Could not load the prompt list.";
       return;
     }
     if (!prompts.length) {
+      showSetup();
       banner.hidden = false;
       banner.textContent = "The prompt list is empty.";
       return;
     }
-    queue = loadQueue();
-    done = loadDone();
-    session = loadSession();
     bind();
     if (!configured()) {
       banner.hidden = false;
@@ -655,9 +768,11 @@
   function showPhoneGate() {
     hideCapture();
     screenPhone.hidden = false;
+    const invite = captureInvite();
     const link = new URL(location.href);
     link.search = "";
     link.hash = "";
+    if (invite) link.searchParams.set("invite", invite);
     const holder = document.getElementById("phone-qr");
     if (!holder || holder.childElementCount || typeof qrcode !== "function") return;
     const code = qrcode(0, "M");

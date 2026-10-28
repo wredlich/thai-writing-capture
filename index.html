@@ -12,6 +12,7 @@
       var coarse = window.matchMedia("(pointer: coarse)").matches;
       var shortSide = Math.min(window.screen.width || 0, window.screen.height || 0);
       if (!(coarse && shortSide <= 500)) document.documentElement.classList.add("need-phone");
+      else document.documentElement.classList.add("booting");
     })();
   </script>
   <link rel="preload" href="fonts/noto-serif-thai-thai-600.woff2" as="font" type="font/woff2" crossorigin>
@@ -42,18 +43,6 @@
             <label><input type="radio" name="handedness" value="both"><span>Both · ทั้งสอง</span></label>
           </div>
         </fieldset>
-        <fieldset>
-          <legend>Age range <small>ช่วงอายุ</small></legend>
-          <div class="choices">
-            <label><input type="radio" name="age_range" value="Under 18" required><span>Under 18</span></label>
-            <label><input type="radio" name="age_range" value="18-24"><span>18-24</span></label>
-            <label><input type="radio" name="age_range" value="25-34"><span>25-34</span></label>
-            <label><input type="radio" name="age_range" value="35-44"><span>35-44</span></label>
-            <label><input type="radio" name="age_range" value="45-54"><span>45-54</span></label>
-            <label><input type="radio" name="age_range" value="55-64"><span>55-64</span></label>
-            <label><input type="radio" name="age_range" value="65+"><span>65+</span></label>
-          </div>
-        </fieldset>
         <label class="consent">
           <input id="consent" type="checkbox" name="consent" required>
           <span>I agree my anonymous handwriting strokes may be used to train a handwriting recognition model</span>
@@ -77,7 +66,7 @@
           </div>
         </div>
         <p id="progress" class="progress" aria-live="polite">0 of 183 done</p>
-        <button id="btn-restart" type="button" class="text-btn">Start over</button>
+        <button id="btn-break" type="button" class="text-btn">Take a break</button>
       </header>
       <p id="list-warning" class="banner" hidden>The prompt list changed since this session started. Continuing at your saved place.</p>
       <section class="prompt-block">
@@ -90,16 +79,18 @@
         <canvas id="pad" aria-label="Handwriting canvas"></canvas>
         <p id="hint" class="hint">Write here · เขียนตรงนี้</p>
       </div>
-      <p id="write-error" class="form-error" role="alert" hidden></p>
-      <p id="upload-status" class="upload-status" role="status"></p>
+      <p id="upload-status" class="upload-status" role="status">
+        <svg id="upload-check" class="upload-check" hidden viewBox="0 0 24 24" width="22" height="22" aria-label="Uploaded">
+          <path d="M5 12.5 9.2 17 19 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span id="upload-text"></span>
+      </p>
       <footer class="toolbar">
+        <button id="btn-back" type="button" class="ghost" disabled>Back</button>
         <button id="btn-clear" type="button" class="ghost" disabled>Clear</button>
-        <button id="btn-break" type="button" class="text-btn">Take a break</button>
-        <div class="toolbar-right">
-          <button id="btn-skip" type="button" class="ghost">Skip</button>
-          <button id="btn-next" type="button" class="primary" disabled>Next</button>
-        </div>
+        <button id="btn-next" type="button" class="primary" disabled>Next</button>
       </footer>
+      <p id="write-error" class="form-error" role="alert" hidden></p>
     </div>
   </main>
 
@@ -115,6 +106,19 @@
       <p id="break-count" class="echo-note">0 of 183 done</p>
       <p>Your place is saved on this phone. Open this page again here when you want to continue.</p>
       <button id="btn-continue" type="button" class="primary">Continue</button>
+    </div>
+  </main>
+
+  <main id="screen-invite" class="screen" hidden>
+    <div class="setup-wrap">
+      <header class="brand">
+        <span class="seal" aria-hidden="true">W</span>
+        <div>
+          <p class="wordmark">Write Echo</p>
+          <h1>You need an invite link</h1>
+        </div>
+      </header>
+      <p>Ask the person who sent you here for a link, then open that link on this phone.</p>
     </div>
   </main>
 
@@ -143,8 +147,12 @@
       </header>
       <p class="tagline">Help teach a computer to read Thai handwriting</p>
       <p class="echo-note">The Read Echo apps will learn from handwriting like yours.</p>
-      <p id="thanks-status" class="upload-status" role="status"></p>
-      <button id="btn-again" type="button" class="ghost">Start over</button>
+      <p id="thanks-status" class="upload-status" role="status">
+        <svg id="thanks-check" class="upload-check" hidden viewBox="0 0 24 24" width="22" height="22" aria-label="Uploaded">
+          <path d="M5 12.5 9.2 17 19 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span id="thanks-text"></span>
+      </p>
     </div>
   </main>
 
