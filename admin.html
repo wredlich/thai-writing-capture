@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f3ecdf">
+  <meta name="color-scheme" content="light">
+  <title>Write Echo — export</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="screen">
+    <div class="setup-wrap">
+      <header class="brand">
+        <span class="seal" aria-hidden="true">W</span>
+        <div>
+          <h1 class="wordmark">Write Echo</h1>
+          <p class="tagline">Export handwriting</p>
+        </div>
+      </header>
+      <p id="admin-banner" class="banner" hidden></p>
+      <section id="panel-signed-out" class="card">
+        <p class="lede">Sign in with the email listed in the admins table. A magic link opens this page.</p>
+        <form id="magic-form">
+          <label class="field">
+            <span>Email</span>
+            <input id="email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+          </label>
+          <button id="btn-send" class="primary" type="submit">Send magic link</button>
+        </form>
+        <p id="magic-status" class="fine" role="status"></p>
+        <p class="fine">This page’s redirect URL must be allowed in Supabase:</p>
+        <p id="redirect-url" class="redirect"></p>
+      </section>
+      <section id="panel-signed-in" class="card" hidden>
+        <p id="signed-in-as" class="lede"></p>
+        <button id="btn-export" class="primary" type="button">Download JSON</button>
+        <p id="export-status" class="fine" role="status"></p>
+        <button id="btn-sign-out" class="ghost" type="button">Sign out</button>
+      </section>
+      <p class="fine"><a href="index.html">Back to Write Echo</a></p>
+    </div>
+  </main>
+  <script src="config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
