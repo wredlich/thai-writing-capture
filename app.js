@@ -108,13 +108,46 @@
     }
   }
 
+  function inviteFromUrl() {
+    return normalizeInvite(new URLSearchParams(location.search).get("invite"));
+  }
+
   function captureInvite() {
-    const fromUrl = normalizeInvite(new URLSearchParams(location.search).get("invite"));
+    const fromUrl = inviteFromUrl();
     if (!fromUrl) return readInvite();
     try {
       localStorage.setItem(KEY_INVITE, fromUrl);
     } catch (err) { /* the URL still carries the code */ }
     return fromUrl;
+  }
+
+  // A new ?invite= cannot update the stored writer (anon is insert-only).
+  // Insert a new row and keep the local done-set so the list does not restart.
+  function adoptUrlInvite() {
+    const urlInvite = inviteFromUrl();
+    if (!urlInvite || !session || !session.writer) return;
+    if (normalizeInvite(session.writer.invite_code) === urlInvite) return;
+    const previous = session.writer;
+    const handedness = previous.handedness;
+    if (handedness !== "right" && handedness !== "left" && handedness !== "both") return;
+    const nickname = String(previous.nickname || "").trim().slice(0, 80);
+    if (!nickname) return;
+    const writer = {
+      id: crypto.randomUUID(),
+      nickname,
+      handedness,
+      consented: true,
+      device: deviceInfo(),
+    };
+    if (previous.age_range) writer.age_range = previous.age_range;
+    if (!legacyColumns) writer.invite_code = urlInvite;
+    session.writer = writer;
+    if (!saveSession() || !enqueue({ kind: "writer", payload: writer })) {
+      session.writer = previous;
+      saveSession();
+      queue = queue.filter((item) => item.payload.id !== writer.id);
+      persistQueue();
+    }
   }
 
   async function detectInvites() {
@@ -756,6 +789,7 @@
       banner.textContent = "Uploads are off until SUPABASE_URL and SUPABASE_ANON_KEY are set in config.js. Writing still saves on this device.";
     }
     if (session) {
+      adoptUrlInvite();
       session.index = firstUndone();
       saveSession();
     }
