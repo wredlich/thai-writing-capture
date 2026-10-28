@@ -5,14 +5,6 @@
   const KEY_QUEUE = "write-echo.queue.v1";
   const KEY_DONE = "write-echo.done.v1";
   const KEY_INVITE = "write-echo.invite.v1";
-  const KIND_LABEL = {
-    consonant: "พยัญชนะ · consonant",
-    vowel: "สระ · vowel",
-    tone: "วรรณยุกต์ · tone mark",
-    mark: "เครื่องหมาย · mark",
-    digit: "ตัวเลข · digit",
-    word: "คำ · word",
-  };
 
   const screenSetup = document.getElementById("screen-setup");
   const screenWrite = document.getElementById("screen-write");
@@ -24,10 +16,8 @@
   const banner = document.getElementById("config-banner");
   const progressEl = document.getElementById("progress");
   const whoEl = document.getElementById("who");
-  const kindEl = document.getElementById("kind-label");
   const promptEl = document.getElementById("prompt-text");
   const styleEl = document.getElementById("style-label");
-  const styleHelp = document.getElementById("style-help");
   const listWarning = document.getElementById("list-warning");
   const padWrap = document.getElementById("pad-wrap");
   const canvas = document.getElementById("pad");
@@ -482,12 +472,10 @@
     t0 = performance.now();
     writeError.hidden = true;
     renderDone();
-    kindEl.textContent = KIND_LABEL[task.prompt.kind] || task.prompt.kind;
     promptEl.textContent = task.prompt.text;
     promptEl.className = `prompt-text ${sizeClass(task.prompt.text)}`;
     styleEl.textContent = `${task.rep + 1} of ${repeats}`;
     styleEl.classList.remove("fast");
-    styleHelp.textContent = "เขียนแบบที่คุณเขียนปกติ";
     btnBack.disabled = session.index <= 0;
     redraw();
   }
@@ -534,6 +522,7 @@
     hint.hidden = hasInk;
     btnClear.disabled = !hasInk;
     btnNext.disabled = !hasInk;
+    btnNext.classList.toggle("ready", hasInk);
   }
 
   function resize() {
