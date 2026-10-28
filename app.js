@@ -285,7 +285,7 @@
 
   function inkWidth(point) {
     const pressure = point.pressure > 0 ? Math.min(point.pressure, 1) : 0.5;
-    return 1.5 + pressure * 2.6;
+    return 4 + pressure;
   }
 
   function paint(points) {
@@ -313,8 +313,8 @@
     ctx.clearRect(0, 0, w, h);
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
-    ctx.strokeStyle = "#211910";
-    ctx.fillStyle = "#211910";
+    ctx.strokeStyle = "#FFFFFF";
+    ctx.fillStyle = "#FFFFFF";
     strokes.forEach(paint);
     const hasInk = strokes.some((stroke) => stroke.length);
     hint.hidden = hasInk;
