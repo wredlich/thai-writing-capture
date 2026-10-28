@@ -96,7 +96,7 @@ Noto Serif Thai is included under the SIL Open Font License (`fonts/OFL.txt`).
 
 ## Invite links
 
-After `supabase/migrations/20261028_invites.sql` has been run, each helper needs a personal link such as `https://wredlich.github.io/thai-writing-capture/?invite=CODE`. The capture page reads `invite` from the URL and remembers it on that phone. Without a code, a phone sees “You need an invite link” and does not show the writing form. A desktop still shows the phone screen, and its QR code includes the invite when the page was opened with one.
+After `supabase/migrations/20261028_invites.sql` has been run, each helper needs a personal link such as `https://wredlich.github.io/thai-writing-capture/?invite=CODE`. The capture page reads `invite` from the URL and remembers it on that phone. Opening a link whose code differs from the writer stored on this phone (or when that writer has no code) inserts a new writer row for the link and continues at the same place in the list. The same code resumes the stored writer. Without a code, a phone sees “You need an invite link” and does not show the writing form. A desktop still shows the phone screen, and its QR code includes the invite when the page was opened with one.
 
 On the admin page, a signed-in admin types a label, creates an 8-character code, and copies the link. The page lists the codes already created. The anon key cannot read the invite table. A database function checks the code during insert.
 

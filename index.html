@@ -66,14 +66,11 @@
           </div>
         </div>
         <p id="progress" class="progress" aria-live="polite">0 of 183 done</p>
-        <button id="btn-break" type="button" class="text-btn">Take a break</button>
       </header>
       <p id="list-warning" class="banner" hidden>The prompt list changed since this session started. Continuing at your saved place.</p>
       <section class="prompt-block">
-        <p id="kind-label" class="kind"></p>
         <h2 id="prompt-text" class="prompt-text" lang="th"></h2>
         <p id="style-label" class="style-label"></p>
-        <p id="style-help" class="style-help" lang="th"></p>
       </section>
       <div id="pad-wrap" class="pad-wrap">
         <canvas id="pad" aria-label="Handwriting canvas"></canvas>
@@ -86,9 +83,10 @@
         <span id="upload-text"></span>
       </p>
       <footer class="toolbar">
-        <button id="btn-back" type="button" class="ghost" disabled>Back</button>
+        <button id="btn-back" type="button" disabled>Back</button>
         <button id="btn-clear" type="button" class="ghost" disabled>Clear</button>
         <button id="btn-next" type="button" class="primary" disabled>Next</button>
+        <button id="btn-break" type="button">Break</button>
       </footer>
       <p id="write-error" class="form-error" role="alert" hidden></p>
     </div>

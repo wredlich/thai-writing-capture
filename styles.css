@@ -212,7 +212,7 @@ fieldset {
 
 .gloss { margin: 0 0 16px 34px; }
 
-.primary, .ghost, .text-btn {
+.primary, .ghost, .text-btn, .toolbar button {
   border-radius: 999px;
   min-height: 48px;
   padding: 10px 18px;
@@ -293,8 +293,8 @@ body.writing {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 12px;
-  padding: 10px 14px 0;
+  gap: 8px;
+  padding: 6px 14px 0;
 }
 
 .progress {
@@ -308,19 +308,13 @@ body.writing {
 
 .prompt-block {
   text-align: center;
-  padding: 8px 16px 4px;
-}
-
-.kind, .style-help {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.85rem;
+  padding: 0 16px 2px;
 }
 
 .prompt-text {
-  margin: 2px 0;
+  margin: 0;
   font-weight: 600;
-  line-height: 1.45;
+  line-height: 1.15;
   word-break: keep-all;
 }
 
@@ -348,8 +342,8 @@ body.writing {
 .pad-wrap {
   position: relative;
   flex: 1;
-  min-height: 160px;
-  margin: 8px 14px;
+  min-height: 140px;
+  margin: 4px 14px;
   background: #1a1a2e;
   border-radius: 18px;
   box-shadow: 0 1px 0 rgba(33, 25, 16, 0.05), 0 12px 40px rgba(80, 50, 20, 0.06);
@@ -423,7 +417,34 @@ body.writing {
   grid-template-columns: 1fr 1fr 1fr;
   gap: 8px;
   align-items: center;
-  padding: 8px 14px calc(12px + env(safe-area-inset-bottom));
+  padding: 4px 14px calc(8px + env(safe-area-inset-bottom));
+}
+
+.toolbar button {
+  width: 100%;
+  color: #fff;
+  font-weight: 600;
+}
+
+#btn-back {
+  background: var(--seal);
+  border: 1px solid var(--seal);
+}
+
+#btn-clear {
+  background: transparent;
+  border: 1px solid var(--line);
+}
+
+#btn-break {
+  grid-column: 2;
+  background: #1a1a2e;
+  border: 1px solid #1a1a2e;
+}
+
+#btn-next.ready {
+  background: #1d8f4e;
+  border-color: #1d8f4e;
 }
 
 .phone-gate { text-align: center; }
@@ -441,7 +462,6 @@ body.writing {
   border-radius: 12px;
 }
 
-.toolbar .ghost, .toolbar .primary { width: 100%; }
 
 .invite-list {
   list-style: none;
@@ -476,11 +496,10 @@ h2 { font-size: 1.15rem; margin: 18px 0 8px; }
   .upload-check.fade { animation: none; opacity: 1; }
 }
 
-@media (max-height: 560px) {
-  .kind, .style-help { display: none; }
-  .prompt-text.size-xl, .prompt-text.size-lg { font-size: 44px; }
-  .prompt-block { padding-top: 0; }
+@media (max-height: 700px) {
+  .prompt-text.size-xl, .prompt-text.size-lg { font-size: 64px; }
   .seal { width: 36px; height: 36px; }
+  .topbar { padding-top: 4px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

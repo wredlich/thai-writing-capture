@@ -5,14 +5,6 @@
   const KEY_QUEUE = "write-echo.queue.v1";
   const KEY_DONE = "write-echo.done.v1";
   const KEY_INVITE = "write-echo.invite.v1";
-  const KIND_LABEL = {
-    consonant: "พยัญชนะ · consonant",
-    vowel: "สระ · vowel",
-    tone: "วรรณยุกต์ · tone mark",
-    mark: "เครื่องหมาย · mark",
-    digit: "ตัวเลข · digit",
-    word: "คำ · word",
-  };
 
   const screenSetup = document.getElementById("screen-setup");
   const screenWrite = document.getElementById("screen-write");
@@ -24,10 +16,8 @@
   const banner = document.getElementById("config-banner");
   const progressEl = document.getElementById("progress");
   const whoEl = document.getElementById("who");
-  const kindEl = document.getElementById("kind-label");
   const promptEl = document.getElementById("prompt-text");
   const styleEl = document.getElementById("style-label");
-  const styleHelp = document.getElementById("style-help");
   const listWarning = document.getElementById("list-warning");
   const padWrap = document.getElementById("pad-wrap");
   const canvas = document.getElementById("pad");
@@ -108,13 +98,46 @@
     }
   }
 
+  function inviteFromUrl() {
+    return normalizeInvite(new URLSearchParams(location.search).get("invite"));
+  }
+
   function captureInvite() {
-    const fromUrl = normalizeInvite(new URLSearchParams(location.search).get("invite"));
+    const fromUrl = inviteFromUrl();
     if (!fromUrl) return readInvite();
     try {
       localStorage.setItem(KEY_INVITE, fromUrl);
     } catch (err) { /* the URL still carries the code */ }
     return fromUrl;
+  }
+
+  // A new ?invite= cannot update the stored writer (anon is insert-only).
+  // Insert a new row and keep the local done-set so the list does not restart.
+  function adoptUrlInvite() {
+    const urlInvite = inviteFromUrl();
+    if (!urlInvite || !session || !session.writer) return;
+    if (normalizeInvite(session.writer.invite_code) === urlInvite) return;
+    const previous = session.writer;
+    const handedness = previous.handedness;
+    if (handedness !== "right" && handedness !== "left" && handedness !== "both") return;
+    const nickname = String(previous.nickname || "").trim().slice(0, 80);
+    if (!nickname) return;
+    const writer = {
+      id: crypto.randomUUID(),
+      nickname,
+      handedness,
+      consented: true,
+      device: deviceInfo(),
+    };
+    if (previous.age_range) writer.age_range = previous.age_range;
+    if (!legacyColumns) writer.invite_code = urlInvite;
+    session.writer = writer;
+    if (!saveSession() || !enqueue({ kind: "writer", payload: writer })) {
+      session.writer = previous;
+      saveSession();
+      queue = queue.filter((item) => item.payload.id !== writer.id);
+      persistQueue();
+    }
   }
 
   async function detectInvites() {
@@ -449,12 +472,10 @@
     t0 = performance.now();
     writeError.hidden = true;
     renderDone();
-    kindEl.textContent = KIND_LABEL[task.prompt.kind] || task.prompt.kind;
     promptEl.textContent = task.prompt.text;
     promptEl.className = `prompt-text ${sizeClass(task.prompt.text)}`;
     styleEl.textContent = `${task.rep + 1} of ${repeats}`;
     styleEl.classList.remove("fast");
-    styleHelp.textContent = "เขียนแบบที่คุณเขียนปกติ";
     btnBack.disabled = session.index <= 0;
     redraw();
   }
@@ -501,6 +522,7 @@
     hint.hidden = hasInk;
     btnClear.disabled = !hasInk;
     btnNext.disabled = !hasInk;
+    btnNext.classList.toggle("ready", hasInk);
   }
 
   function resize() {
@@ -756,6 +778,7 @@
       banner.textContent = "Uploads are off until SUPABASE_URL and SUPABASE_ANON_KEY are set in config.js. Writing still saves on this device.";
     }
     if (session) {
+      adoptUrlInvite();
       session.index = firstUndone();
       saveSession();
     }
