@@ -759,7 +759,10 @@
     try {
       const response = await fetch("prompts.json", { cache: "no-cache" });
       if (!response.ok) throw new Error("status " + response.status);
-      prompts = expandPrompts(await response.json());
+      const promptData = await response.json();
+      // ?set=full loads the previous 61-prompt list kept under "full".
+      const useFull = new URLSearchParams(location.search).get("set") === "full" && promptData.full;
+      prompts = expandPrompts(useFull ? promptData.full : promptData);
     } catch (err) {
       showSetup();
       banner.hidden = false;
