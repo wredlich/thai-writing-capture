@@ -17,6 +17,9 @@ ROOT = Path(__file__).resolve().parents[1]
 PATH = ROOT / "prompts.json"
 
 CONSONANTS = list("กขคงจฉชซดตถทนบปผฝพฟภมยรลวสหอ")
+# Initial trial (2026-11-01): the 42 modern consonants (no obsolete ฃ ฅ), nothing else.
+# The previous list is kept under "full" and loads with ?set=full.
+TRIAL_CONSONANTS = list("กขคฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรลวศษสหฬอฮ")
 EXCLUDED = set("ฃฅฆฌญฎฏฐฑฒณธศษฬฮ")
 THAI_DIGITS = set("๐๑๒๓๔๕๖๗๘๙")
 VOWELS = [
@@ -60,7 +63,7 @@ def fail(message: str) -> None:
     raise SystemExit(1)
 
 
-def texts_ok(kind: str, values: object, expected: list[str]) -> list[str]:
+def texts_ok(kind: str, values: object, expected: list[str], excluded: set = EXCLUDED) -> list[str]:
     if not isinstance(values, list):
         fail(f"{kind} is not an array")
     if values != expected:
@@ -70,9 +73,20 @@ def texts_ok(kind: str, values: object, expected: list[str]) -> list[str]:
             fail(f"{kind} is not NFC: {text!r}")
         if any(ch in THAI_DIGITS for ch in text):
             fail(f"Thai digit in {kind}: {text!r}")
-        if any(ch in EXCLUDED for ch in text):
+        if any(ch in excluded for ch in text):
             fail(f"excluded consonant in {kind}: {text!r}")
     return values
+
+
+def check_obj(data: object, keys: set) -> dict:
+    if not isinstance(data, dict):
+        fail("expected an object")
+    if data.get("repeats") != 3:
+        fail("repeats must be 3")
+    extra = set(data) - keys
+    if extra:
+        fail(f"unexpected keys: {sorted(extra)}")
+    return data
 
 
 def main() -> None:
@@ -80,19 +94,17 @@ def main() -> None:
         data = json.loads(PATH.read_text(encoding="utf-8"))
     except json.JSONDecodeError as exc:
         fail(f"invalid JSON ({exc})")
-    if not isinstance(data, dict):
-        fail("expected an object")
-    if data.get("repeats") != 3:
-        fail("repeats must be 3")
-    consonants = texts_ok("consonants", data.get("consonants"), CONSONANTS)
-    vowels = texts_ok("vowels", data.get("vowels"), VOWELS)
-    tones = texts_ok("tones", data.get("tones"), TONES)
-    words = texts_ok("words", data.get("words"), WORDS)
-    extra = set(data) - {"repeats", "consonants", "vowels", "tones", "words"}
-    if extra:
-        fail(f"unexpected keys: {sorted(extra)}")
-    count = len(consonants) + len(vowels) + len(tones) + len(words)
-    print(f"ok {count} prompts x {data['repeats']} = {count * data['repeats']} steps, {len(words)} words")
+    base = {"repeats", "consonants", "vowels", "tones", "words"}
+    check_obj(data, base | {"full"})
+    consonants = texts_ok("consonants", data.get("consonants"), TRIAL_CONSONANTS, set("ฃฅ"))
+    for key in ("vowels", "tones", "words"):
+        texts_ok(key, data.get(key), [])
+    count = len(consonants)
+    print(f"ok trial {count} prompts x {data['repeats']} = {count * data['repeats']} steps")
+    full = check_obj(data.get("full"), base)
+    n = sum(len(texts_ok(k, full.get(k), e)) for k, e in
+            (("consonants", CONSONANTS), ("vowels", VOWELS), ("tones", TONES), ("words", WORDS)))
+    print(f"ok full {n} prompts x {full['repeats']} = {n * full['repeats']} steps")
 
 
 if __name__ == "__main__":
