@@ -70,7 +70,7 @@ You export from https://wredlich.github.io/thai-writing-capture/admin.html — e
 
 The start screen asks for a nickname, handedness (right, left, or both), and this consent line: “I agree my anonymous handwriting strokes may be used to train a handwriting recognition model.”
 
-`prompts.json` is the whole prompt list. It has the common consonants, the main vowel forms on อ, the four tone marks on อ, and ten short words. Each prompt is asked three times, so the progress counter runs to 183 (for example `4 of 183 done`). There are no Thai numerals and no second font or fast copy.
+`prompts.json` is the default prompt list. It has all 42 consonants, the 19 vowel forms on อ, the four tone marks on อ, and ten short words. Each prompt is asked three times, so the progress counter runs to 225 (for example `4 of 225 done`). The page tells writers this takes about 30 minutes. The older 61-prompt list is kept under `full` and still loads with `?set=full`. There are no Thai numerals and no second font or fast copy.
 
 Back, Clear, and Next sit on one row under the writing box. Next stays disabled until there is ink. Clear wipes the current canvas. Back returns to the previous prompt; writing it again inserts a new sample. Rows are not updated. A successful upload shows a checkmark that fades out. Text appears only when an upload fails.
 

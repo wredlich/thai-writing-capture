@@ -17,8 +17,8 @@ ROOT = Path(__file__).resolve().parents[1]
 PATH = ROOT / "prompts.json"
 
 CONSONANTS = list("กขคงจฉชซดตถทนบปผฝพฟภมยรลวสหอ")
-# Initial trial (2026-11-01): the 42 modern consonants (no obsolete ฃ ฅ), nothing else.
-# The previous list is kept under "full" and loads with ?set=full.
+# Default: the 42 modern consonants (no obsolete ฃ ฅ), unchanged and in this order,
+# plus the vowel, tone, and word groups copied from "full". ?set=full still loads "full".
 TRIAL_CONSONANTS = list("กขคฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรลวศษสหฬอฮ")
 EXCLUDED = set("ฃฅฆฌญฎฏฐฑฒณธศษฬฮ")
 THAI_DIGITS = set("๐๑๒๓๔๕๖๗๘๙")
@@ -97,10 +97,11 @@ def main() -> None:
     base = {"repeats", "consonants", "vowels", "tones", "words"}
     check_obj(data, base | {"full"})
     consonants = texts_ok("consonants", data.get("consonants"), TRIAL_CONSONANTS, set("ฃฅ"))
-    for key in ("vowels", "tones", "words"):
-        texts_ok(key, data.get(key), [])
-    count = len(consonants)
-    print(f"ok trial {count} prompts x {data['repeats']} = {count * data['repeats']} steps")
+    vowels = texts_ok("vowels", data.get("vowels"), VOWELS)
+    tones = texts_ok("tones", data.get("tones"), TONES)
+    words = texts_ok("words", data.get("words"), WORDS)
+    count = len(consonants) + len(vowels) + len(tones) + len(words)
+    print(f"ok default {count} prompts x {data['repeats']} = {count * data['repeats']} steps")
     full = check_obj(data.get("full"), base)
     n = sum(len(texts_ok(k, full.get(k), e)) for k, e in
             (("consonants", CONSONANTS), ("vowels", VOWELS), ("tones", TONES), ("words", WORDS)))
